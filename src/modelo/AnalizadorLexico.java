@@ -25,6 +25,7 @@ public class AnalizadorLexico {
 			}
 			
 			if (esEntero()) continue;
+			if(esReal()) continue;
 			if(esIdentificador()) continue;
 			
 			listaTokens.add(new Token(Categoria.DESCONOCIDO,""+caracterActual,filaActual,columnaActual));
@@ -49,18 +50,23 @@ public class AnalizadorLexico {
 			while(Character.isDigit(caracterActual)) {
 				palabra+=caracterActual;
 				obtenerSiguienteCaracter();
+				
 			}
 			
-			listaTokens.add(new Token(Categoria.ENTERO, palabra, fila, columna));
-			return true;
-		}
-		
+			if (caracterActual=='.') {
+				//backTracking
+				return backTracking(palabra,fila,columna);
+			}else {
+				listaTokens.add(new Token(Categoria.ENTERO, palabra, fila, columna));
+				return true;
+			}			
+		}	
 		//rechazo inmediato
 		return false;
 	}
 	
-	public boolean esIdentificador() {
-		if(Character.isLetter(caracterActual)||caracterActual=='_'||caracterActual=='$') {
+	public boolean esReal() {
+		if(Character.isDigit(caracterActual)) {
 			String palabra="";
 			int fila=filaActual;
 			int columna=columnaActual;
@@ -69,19 +75,134 @@ public class AnalizadorLexico {
 			palabra+=caracterActual;
 			obtenerSiguienteCaracter();
 			
-			while(Character.isLetter(caracterActual)||caracterActual=='_'||caracterActual=='$'||Character.isDigit(caracterActual)) {
+			while(Character.isDigit(caracterActual)) {
 				palabra+=caracterActual;
 				obtenerSiguienteCaracter();
+				
 			}
 			
-			listaTokens.add(new Token(Categoria.IDENTIFICADOR, palabra, fila, columna));
-			return true;
+			if (caracterActual=='.') {
+				palabra+=caracterActual;
+				obtenerSiguienteCaracter();
+				
+				while(Character.isDigit(caracterActual)) {
+					palabra+=caracterActual;
+					obtenerSiguienteCaracter();
+					
+				}
+				
+				listaTokens.add(new Token(Categoria.REAL, palabra, fila, columna));
+				return true;
+				
+			}else {
+				//backtracking
+				return backTracking(palabra, fila, columna);
+			}			
+		}else if(caracterActual=='.') {
+			String palabra="";
+			int fila=filaActual;
+			int columna=columnaActual;
+			
+			//transicion
+			palabra+=caracterActual;
+			obtenerSiguienteCaracter();
+			
+			if(Character.isDigit(caracterActual)) {
+				palabra+=caracterActual;
+				obtenerSiguienteCaracter();
+				
+				while(Character.isDigit(caracterActual)) {
+					palabra+=caracterActual;
+					obtenerSiguienteCaracter();	
+				}
+				
+				listaTokens.add(new Token(Categoria.REAL, palabra, fila, columna));
+				return true;
+				
+			}else {
+				return backTracking(palabra, fila, columna);
+			}
+			
+			
+		}
+		//rechazo inmediato
+		return false;
+	}
+	
+	public boolean esIdentificador() {
+		if(caracterActual=='@') {
+			String palabra="";
+			int fila=filaActual;
+			int columna=columnaActual;
+			
+			//transicion
+			palabra+=caracterActual;
+			obtenerSiguienteCaracter();
+		
+			if(Character.isLetter(caracterActual)||caracterActual=='_') {
+				palabra+=caracterActual;
+				obtenerSiguienteCaracter();
+				
+				while(Character.isLetter(caracterActual)||caracterActual=='_') {
+					palabra+=caracterActual;
+					obtenerSiguienteCaracter();
+				}
+				
+				listaTokens.add(new Token(Categoria.IDENTIFICADOR, palabra, fila, columna));
+				return true;
+				
+			}else {
+				return backTracking(palabra, fila, columna);
+			}
+			
 		}
 		
 		//rechazo inmediato
 		return false;
 	}
 	
+	public boolean esReservada() {
+		if(caracterActual=='@') {
+			String palabra="";
+			int fila=filaActual;
+			int columna=columnaActual;
+			
+			//transicion
+			palabra+=caracterActual;
+			obtenerSiguienteCaracter();
+		
+			if(Character.isLetter(caracterActual)||caracterActual=='_') {
+				palabra+=caracterActual;
+				obtenerSiguienteCaracter();
+				
+				while(Character.isLetter(caracterActual)||caracterActual=='_') {
+					palabra+=caracterActual;
+					obtenerSiguienteCaracter();
+				}
+				
+				listaTokens.add(new Token(Categoria.IDENTIFICADOR, palabra, fila, columna));
+				return true;
+				
+			}else {
+				return backTracking(palabra, fila, columna);
+			}
+			
+		}
+		
+		//rechazo inmediato
+		return false;
+	}
+	
+	
+
+	private boolean backTracking(String palabra, int fila, int columna) {
+		this.filaActual=fila;
+		this.columnaActual=columna;
+		this.posicionActual-=palabra.length();
+		this.caracterActual= codigoFuente.charAt(posicionActual);
+		return false;
+	}
+
 	public void obtenerSiguienteCaracter() {
 		posicionActual++;
 		if(posicionActual<codigoFuente.length()) {
