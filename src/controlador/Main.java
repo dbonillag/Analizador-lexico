@@ -1,4 +1,4 @@
-package vista;
+package controlador;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
