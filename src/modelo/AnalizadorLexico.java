@@ -56,7 +56,7 @@ public class AnalizadorLexico {
 
 			}
 
-			if (caracterActual == '.') {
+			if (caracterActual == '.'||caracterActual == 'h') {
 				// backTracking
 				return backTracking(palabra, fila, columna);
 			} else {
@@ -737,7 +737,65 @@ public class AnalizadorLexico {
 		}
 
 	}
+	
+	public boolean esHexadecimal() {
+		if (Character.isDigit(caracterActual)||(caracterActual>='A'&&caracterActual<='F')) {
+			String palabra = "";
+			int fila = filaActual;
+			int columna = columnaActual;
 
+			// transicion
+			palabra += caracterActual;
+			obtenerSiguienteCaracter();
+
+			while (Character.isDigit(caracterActual)||(caracterActual>='A'&&caracterActual<='F')) {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+
+			}
+
+			if (caracterActual == 'h') {
+				listaTokens.add(new Token(Categoria.ENTERO, palabra, fila, columna));
+				return true;
+				
+			} else {
+				// backTracking
+				return backTracking(palabra, fila, columna);
+			}
+		}
+		// rechazo inmediato
+		return false;
+	}
+
+	public boolean esCadenaDeCaracteres() {
+		if (caracterActual=='"') {
+			String palabra = "";
+			int fila = filaActual;
+			int columna = columnaActual;
+
+			// transicion
+			palabra += caracterActual;
+			obtenerSiguienteCaracter();
+
+			while (Character.isDigit(caracterActual)||(caracterActual>='A'&&caracterActual<='F')) {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+
+			}
+			
+			if (caracterActual == 'h') {
+				listaTokens.add(new Token(Categoria.ENTERO, palabra, fila, columna));
+				return true;
+				
+			} else {
+				// backTracking
+				return backTracking(palabra, fila, columna);
+			}
+		}
+		// rechazo inmediato
+		return false;
+	}
+	
 	/**
 	 * @return the listaTokens
 	 */
