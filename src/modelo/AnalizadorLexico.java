@@ -15,7 +15,7 @@ public class AnalizadorLexico {
 		this.codigoFuente = codigoFuente;
 		this.listaTokens = new ArrayList<>();
 		this.caracterActual = codigoFuente.charAt(0);
-		this.finCodigo = '¿';
+		this.finCodigo = '°';
 	}
 
 	public void analizar() {
@@ -489,6 +489,8 @@ public class AnalizadorLexico {
 			return true;
 		}else if(caracterActual=='='||caracterActual=='~') {
 			
+			palabra += caracterActual;
+			obtenerSiguienteCaracter();
 			if (caracterActual=='=') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
@@ -857,17 +859,21 @@ public class AnalizadorLexico {
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
 
-			while (caracterActual!='?') {
+			while (caracterActual!='?'||caracterActual!='°') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
 
 			}
-
-			palabra += caracterActual;
-			obtenerSiguienteCaracter();
+			if (caracterActual=='?') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+				
+				listaTokens.add(new Token(Categoria.HEXADECIMAL, palabra, fila, columna));
+				return true;
+			}else {
+				return backTracking(palabra, fila, columna);
+			}
 			
-			listaTokens.add(new Token(Categoria.HEXADECIMAL, palabra, fila, columna));
-			return true;
 		}
 		// rechazo inmediato
 		return false;
