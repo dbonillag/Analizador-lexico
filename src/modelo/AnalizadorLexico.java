@@ -2,7 +2,8 @@ package modelo;
 
 import java.util.ArrayList;
 
-import com.sun.swing.internal.plaf.basic.resources.basic_ja;
+
+
 
 public class AnalizadorLexico {
 
@@ -195,243 +196,36 @@ public class AnalizadorLexico {
 
 	public boolean esReservada() {
 
-		String palabra = "";
-		int fila = filaActual;
-		int columna = columnaActual;
+		
 
-		if (caracterActual == 'Z' || caracterActual == 'R') {
-			// transicion
+		if (Character.isLetter(caracterActual)) {
+			String palabra = "";
+			String[] reservadas= {"Z","R","rep","regret","cicle","capitalism","communism","con","box","trade","type","destroy"};
+			int fila = filaActual;
+			int columna = columnaActual;
+			
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-
-			listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-			return true;
-		} else if (caracterActual == 'r') {
-			palabra += caracterActual;
-			obtenerSiguienteCaracter();
-			if (caracterActual == 'e') {
+			
+			while(Character.isLetter(caracterActual)) {
+				
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-				if (caracterActual == 'p') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-
-					listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-					return true;
-				} else if (caracterActual == 'g') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-					if (caracterActual == 'r') {
-						palabra += caracterActual;
-						obtenerSiguienteCaracter();
-						if (caracterActual == 'e') {
-							palabra += caracterActual;
-							obtenerSiguienteCaracter();
-							if (caracterActual == 't') {
-								palabra += caracterActual;
-								obtenerSiguienteCaracter();
-
-								listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-								return true;
-							}
-						}
-					}
-				}
+				
 			}
-		} else if (caracterActual == 'c') {
-			palabra += caracterActual;
-			obtenerSiguienteCaracter();
-			if (caracterActual == 'i') {
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-				if (caracterActual == 'c') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-					if (caracterActual == 'l') {
-						palabra += caracterActual;
-						obtenerSiguienteCaracter();
-						if (caracterActual == 'e') {
-							palabra += caracterActual;
-							obtenerSiguienteCaracter();
-
-							listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-							return true;
-						}
-
-					}
-				}
-			} else if (caracterActual == 'a') {
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-				if (caracterActual == 'p') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-					if (caracterActual == 'i') {
-						palabra += caracterActual;
-						obtenerSiguienteCaracter();
-						if (caracterActual == 't') {
-							palabra += caracterActual;
-							obtenerSiguienteCaracter();
-							if (caracterActual == 'a') {
-								palabra += caracterActual;
-								obtenerSiguienteCaracter();
-								if (caracterActual == 'l') {
-									palabra += caracterActual;
-									obtenerSiguienteCaracter();
-									if (caracterActual == 'i') {
-										palabra += caracterActual;
-										obtenerSiguienteCaracter();
-										if (caracterActual == 's') {
-											palabra += caracterActual;
-											obtenerSiguienteCaracter();
-											if (caracterActual == 'm') {
-												palabra += caracterActual;
-												obtenerSiguienteCaracter();
-
-												listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-												return true;
-											}
-										}
-
-									}
-								}
-							}
-
-						}
-
-					}
-				}
-			} else if (caracterActual == 'o') {
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-				if (caracterActual == 'm') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-					if (caracterActual == 'm') {
-						palabra += caracterActual;
-						obtenerSiguienteCaracter();
-						if (caracterActual == 'u') {
-							palabra += caracterActual;
-							obtenerSiguienteCaracter();
-							if (caracterActual == 'n') {
-								palabra += caracterActual;
-								obtenerSiguienteCaracter();
-								if (caracterActual == 'i') {
-									palabra += caracterActual;
-									obtenerSiguienteCaracter();
-									if (caracterActual == 's') {
-										palabra += caracterActual;
-										obtenerSiguienteCaracter();
-										if (caracterActual == 'm') {
-											palabra += caracterActual;
-											obtenerSiguienteCaracter();
-
-											listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-											return true;
-
-										}
-
-									}
-								}
-							}
-
-						}
-
-					}
-				} else if (caracterActual == 'n') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-
+			
+			
+			for (int i = 0; i < reservadas.length; i++) {
+				if (palabra.equals(reservadas[i])) {
 					listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
 					return true;
 				}
 			}
-		} else if (caracterActual == 'b') {
-			palabra += caracterActual;
-			obtenerSiguienteCaracter();
-			if (caracterActual == 'o') {
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-				if (caracterActual == 'x') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-
-					listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-					return true;
-				}
-			}
-		} else if (caracterActual == 't') {
-			palabra += caracterActual;
-			obtenerSiguienteCaracter();
-			if (caracterActual == 'r') {
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-				if (caracterActual == 'a') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-					if (caracterActual == 'd') {
-						palabra += caracterActual;
-						obtenerSiguienteCaracter();
-						if (caracterActual == 'e') {
-							palabra += caracterActual;
-							obtenerSiguienteCaracter();
-
-							listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-							return true;
-						}
-					}
-
-				}
-			} else if (caracterActual == 'y') {
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-				if (caracterActual == 'p') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-					if (caracterActual == 'e') {
-						palabra += caracterActual;
-						obtenerSiguienteCaracter();
-
-						listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-						return true;
-					}
-				}
-
-			}
-		} else if (caracterActual == 'd') {
-			palabra += caracterActual;
-			obtenerSiguienteCaracter();
-			if (caracterActual == 'e') {
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-				if (caracterActual == 's') {
-					palabra += caracterActual;
-					obtenerSiguienteCaracter();
-					if (caracterActual == 't') {
-						palabra += caracterActual;
-						obtenerSiguienteCaracter();
-						if (caracterActual == 'r') {
-							palabra += caracterActual;
-							obtenerSiguienteCaracter();
-							if (caracterActual == 'o') {
-								palabra += caracterActual;
-								obtenerSiguienteCaracter();
-								if (caracterActual == 'y') {
-									palabra += caracterActual;
-									obtenerSiguienteCaracter();
-
-									listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
-									return true;
-								}
-							}
-						}
-					}
-				}
-
-			}
+			
+			return backTracking(palabra, fila, columna);
 		}
 		// rechazo inmediato
-		return backTracking(palabra, fila, columna);
+		return false;
 	}
 	
 	public boolean esAritmetico() {
