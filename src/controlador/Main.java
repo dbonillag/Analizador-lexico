@@ -16,7 +16,6 @@ public class Main extends Application {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/vista/VentanaPrincipal.fxml"));
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("/vista/ventanaPrincipal.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 

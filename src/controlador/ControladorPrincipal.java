@@ -14,6 +14,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import modelo.AnalizadorLexico;
+import modelo.ErrorLexico;
 import modelo.Token;
 import modelo.TokenObservable;
 
@@ -42,6 +43,9 @@ public class ControladorPrincipal {
 
 	@FXML // fx:id="campoTexto"
 	private TextArea campoTexto; // Value injected by FXMLLoader
+	
+    @FXML // fx:id="campoErrores"
+    private TextArea campoErrores; // Value injected by FXMLLoader
 
 	@FXML // fx:id="tablaPalabras"
 	private TableView<TokenObservable> tablaPalabras; // Value injected by FXMLLoader
@@ -79,6 +83,12 @@ public class ControladorPrincipal {
 		AnalizadorLexico analizador = new AnalizadorLexico(campoTexto.getText());
 		analizador.analizar();
 		actualizarTabla(analizador.getListaTokens());
+		campoErrores.setText("");
+		for (ErrorLexico error : analizador.getListaErrores()) {
+			campoErrores.appendText(error.toString()+"\n");
+		}
+
+		
 		System.out.println(analizador.getListaTokens().toString());
 	}
 
