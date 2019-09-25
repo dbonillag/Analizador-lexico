@@ -786,4 +786,12 @@ public class AnalizadorLexico {
 		this.listaTokens = listaTokens;
 	}
 
+	public ArrayList<ErrorLexico> getListaErrores() {
+		return listaErrores;
+	}
+
+	public void setListaErrores(ArrayList<ErrorLexico> listaErrores) {
+		this.listaErrores = listaErrores;
+	}
+
 }

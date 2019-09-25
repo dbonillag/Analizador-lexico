@@ -52,6 +52,11 @@ public class ErrorLexico {
 	public void setColumna(int columna) {
 		this.columna = columna;
 	}
+
+	@Override
+	public String toString() {
+		return "ErrorLexico en fila " + fila + ", columna " + columna + ": "+ mensaje  ;
+	}
 	
 	
 	
