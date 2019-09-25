@@ -74,15 +74,3 @@
     -fx-border-color: -fx-box-border;
     -fx-border-insets: 0;
 }
-
-.text-area {
-    -fx-font-family: "Lucida Console";
-    -fx-font-size: 15;
-    -fx-text-fill: #ffffff;
-    -fx-display-caret:true;
-}
-
-.text-area .content{
-      -fx-background-color: #2A2A2A;
- 
-  }

@@ -1,0 +1,13 @@
+
+//.text-area {
+.text-area {
+    -fx-font-family: "Lucida Console";
+    -fx-font-size: 15;
+    -fx-text-fill: #FF0000;
+    -fx-display-caret:true;
+}
+
+.text-area .content{
+      -fx-background-color: #DCDCDC;
+ 
+  }

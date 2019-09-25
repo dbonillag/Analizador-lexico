@@ -15,7 +15,7 @@ public class AnalizadorLexico {
 		this.listaTokens = new ArrayList<>();
 		this.listaErrores = new ArrayList<>();
 		this.caracterActual = codigoFuente.charAt(0);
-		this.finCodigo = '�';
+		this.finCodigo = '°';
 	}
 
 	public void analizar() {
@@ -310,7 +310,7 @@ public class AnalizadorLexico {
 	}
 
 	public boolean esLogico() {
-		if (caracterActual == '^' || caracterActual == '�') {
+		if (caracterActual == '^' || caracterActual == '¨') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -624,7 +624,7 @@ public class AnalizadorLexico {
 	}
 
 	public boolean esComentarioLinea() {
-		if (caracterActual == '�') {
+		if (caracterActual == '¿') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -633,7 +633,7 @@ public class AnalizadorLexico {
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
 
-			if (caracterActual == '�') {
+			if (caracterActual == '¿') {
 				backTracking(palabra, fila, columna);
 			} else {
 				while (caracterActual != '\n' && caracterActual != finCodigo) {
@@ -651,7 +651,7 @@ public class AnalizadorLexico {
 	}
 
 	public boolean esComentarioBloque() {
-		if (caracterActual == '�') {
+		if (caracterActual == '¿') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -660,7 +660,7 @@ public class AnalizadorLexico {
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
 
-			if (caracterActual == '�') {
+			if (caracterActual == '¿') {
 
 				while (caracterActual != finCodigo) {
 					palabra += caracterActual;
