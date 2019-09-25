@@ -38,7 +38,7 @@ public class AnalizadorSintactico {
 	 * Funcion::= fun identificador "("[<ListaParametros>]")" [":"<TipoRetorno>"]
 	 * <BloqueSentencias>
 	 * 
-	 * ninguna otra categoria puede comenzar por fun para evitar ambiguedades
+	 * Ninguna otra categoria puede comenzar por fun para evitar ambiguedades
 	 */
 	public Funcion esFuncion() {
 
@@ -48,21 +48,63 @@ public class AnalizadorSintactico {
 			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
 				Token nombre = tokenActual;
 				obtenerSiguienteToken();
+				return new Funcion(nombre);
 
 			} else {
 				reportarError("Falta el nombre de la funcion");
+				return null;
 			}
 
-		}
-		return null;
+		} else {
 
+			return null;
+		}
 	}
 
-	private void reportarError(String mensaje) {
+	
+	//TODO Parte recursiva está mal
+	public ListaDeParametros esListaDeParametros() {
+		
+		Parametro parametro = esParametro();
+		if (parametro != null) {
+			obtenerSiguienteToken();
+			if (tokenActual.getPalabra().equals(",")) {
+				obtenerSiguienteToken();
+				
+				return new ListaDeParametros(parametro,esListaDeParametros());
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	// TODO Definir los tipos de dato int float doble boolean void char en el
+	// lexico, y cambiar los de acá
+	public Parametro esParametro() {
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && (tokenActual.getPalabra().equals("entero")
+				|| tokenActual.getPalabra().equals("decimal") || tokenActual.getPalabra().equals("texto"))) {
+			Token tipoDato = tokenActual;
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+				Token nombre = tokenActual;
+
+				return new Parametro(tipoDato, nombre);
+
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public void reportarError(String mensaje) {
 		listaErrores.add(new ErrorSintactico(mensaje, tokenActual.getFila(), tokenActual.getColumna()));
 	}
 
-	private void obtenerSiguienteToken() {
+	public void obtenerSiguienteToken() {
 
 		posActual++;
 

@@ -1,3 +1,8 @@
 /Sintaxis.class
-/.settings/
+/.classpath
+/.gitignore
+/.project
+/controlador/
 /modelo/
+/sintaxis/
+/vista/

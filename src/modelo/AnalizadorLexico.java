@@ -203,8 +203,26 @@ public class AnalizadorLexico {
 		return false;
 	}
 
+	
+	/**
+	 * Z : NATURAL
+	 * R : REAL 
+	 * rep : FOR
+	 * regret : RETURN
+	 * cicle : WHILE
+	 * capitalism : PRIVATE
+	 * communism : PUBLIC
+	 * con : IF
+	 * box : PACKAGE
+	 * type : CLASS
+	 * trade : IMPORT
+	 * destroy: BREAK
+	 * 
+	 * El resto no se saben
+	 */
 	public boolean esReservada() {
 
+		
 		if (Character.isLetter(caracterActual)) {
 			String palabra = "";
 			String[] reservadas = { "Z", "R", "rep", "regret", "cicle", "capitalism", "communism", "con", "box",
