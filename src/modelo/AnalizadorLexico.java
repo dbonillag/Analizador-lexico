@@ -701,28 +701,29 @@ public class AnalizadorLexico {
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
 
-			if (caracterActual == '\\') {
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-
-				if (caracterActual == '\'' || caracterActual == '\\' || caracterActual == 't' || caracterActual == 'b'
-						|| caracterActual == 'r' || caracterActual == 'f' || caracterActual == 'n') {
-
+			if (caracterActual != '\'' && caracterActual != finCodigo && caracterActual != '\n') {
+				if (caracterActual == '\\') {
 					palabra += caracterActual;
 					obtenerSiguienteCaracter();
 
+					if (caracterActual == '\'' || caracterActual == '\\' || caracterActual == 't'
+							|| caracterActual == 'b' || caracterActual == 'r' || caracterActual == 'f'
+							|| caracterActual == 'n') {
+
+						palabra += caracterActual;
+						obtenerSiguienteCaracter();
+
+					} else {
+
+						listaErrores.add(new ErrorLexico("caracter despues del backslash invalido", fila, columna));
+
+					}
 				} else {
 
-					listaErrores.add(new ErrorLexico("caracter despues del backslash invalido", fila, columna));
-
+					palabra += caracterActual;
+					obtenerSiguienteCaracter();
 				}
-			} else {
-
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-
 			}
-
 			if (caracterActual == '\'') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
@@ -731,6 +732,7 @@ public class AnalizadorLexico {
 				// backTracking
 				listaErrores.add(new ErrorLexico("Falta ' para finalizar el caracter", fila, columna));
 			}
+
 			listaTokens.add(new Token(Categoria.CARACTER, palabra, fila, columna));
 			return true;
 		}
