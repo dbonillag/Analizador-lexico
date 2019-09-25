@@ -677,7 +677,8 @@ public class AnalizadorLexico {
 						if (caracterActual=='?') {
 							palabra += caracterActual;
 							obtenerSiguienteCaracter();
-							
+							listaTokens.add(new Token(Categoria.COMENTARIO_BLOQUE, palabra, fila, columna));
+							return true;
 						}
 						
 					}
@@ -713,12 +714,11 @@ public class AnalizadorLexico {
 				if (caracterActual=='\\') {
 					palabra += caracterActual;
 					obtenerSiguienteCaracter();
-					if (caracterActual=='\''||caracterActual=='"'||caracterActual=='\\'||caracterActual=='t'||caracterActual=='b'||caracterActual=='r'||caracterActual=='f'||caracterActual=='n') {
+					if (caracterActual=='"'||caracterActual=='\\'||caracterActual=='t'||caracterActual=='b'||caracterActual=='r'||caracterActual=='f'||caracterActual=='n') {
 						palabra += caracterActual;
 						obtenerSiguienteCaracter();
-					}else if(caracterActual=='\'') {
-						
-						
+					}else {
+
 						listaErrores.add(new ErrorLexico("caracter despues del backslash invalido", fila, columna));
 						
 					}
