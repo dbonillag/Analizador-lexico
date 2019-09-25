@@ -34,42 +34,42 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
-
 	/**
-	 * Funcion::= fun identificador "("[<ListaParametros>]")" [":"<TipoRetorno>"] <BloqueSentencias>
+	 * Funcion::= fun identificador "("[<ListaParametros>]")" [":"<TipoRetorno>"]
+	 * <BloqueSentencias>
 	 * 
-	 *  ninguna otra categoria puede comenzar por fun para evitar ambiguedades
+	 * ninguna otra categoria puede comenzar por fun para evitar ambiguedades
 	 */
 	public Funcion esFuncion() {
-		
-		if(tokenActual.getCategoria()==Categoria.RESERVADA && tokenActual.getPalabra().equals("fun")) {
+
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("fun")) {
 			obtenerSiguienteToken();
-			
-			if (tokenActual.getCategoria()==Categoria.IDENTIFICADOR) {
+
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
 				Token nombre = tokenActual;
 				obtenerSiguienteToken();
-				
-			}else {
+
+			} else {
 				reportarError("Falta el nombre de la funcion");
 			}
-			
+
 		}
-		
+		return null;
+
 	}
 
 	private void reportarError(String mensaje) {
-		listaErrores.add(new ErrorSintactico(mensaje,tokenActual.getFila(),tokenActual.getColumna()));
+		listaErrores.add(new ErrorSintactico(mensaje, tokenActual.getFila(), tokenActual.getColumna()));
 	}
 
 	private void obtenerSiguienteToken() {
-		
+
 		posActual++;
-		
-		if (posActual<listaTokens.size()) {
-			tokenActual=listaTokens.get(posActual);
+
+		if (posActual < listaTokens.size()) {
+			tokenActual = listaTokens.get(posActual);
 		}
-		
+
 	}
 
-	
 }

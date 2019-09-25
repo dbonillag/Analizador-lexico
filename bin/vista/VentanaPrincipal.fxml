@@ -8,29 +8,34 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="462.0" prefWidth="846.0" stylesheets="@ventanaPrincipal.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.ControladorPrincipal">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="634.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.ControladorPrincipal">
   <children>
-      <SplitPane dividerPositions="0.5501567398119123" VBox.vgrow="ALWAYS">
+      <SplitPane dividerPositions="0.770940170940171" orientation="VERTICAL" VBox.vgrow="ALWAYS">
          <items>
-            <TableView fx:id="tablaPalabras" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" prefHeight="400.0" prefWidth="387.0">
-              <columns>
-                  <TableColumn fx:id="columnaFila" prefWidth="75.0" text="Fila" />
-                  <TableColumn fx:id="columnaColumna" prefWidth="75.0" text="Columna" />
-                <TableColumn fx:id="columnaPalabra" prefWidth="75.0" text="Palabra" />
-                <TableColumn fx:id="columnaCategoria" prefWidth="75.0" text="Categoría" />
-              </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
-            <BorderPane>
-               <bottom>
-                  <Button fx:id="btnIngresar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0" mnemonicParsing="false" onAction="#ingresar" text="Ingresar" textAlignment="CENTER" BorderPane.alignment="CENTER" />
-               </bottom>
-               <center>
-                  <TextArea fx:id="campoTexto" prefHeight="200.0" prefWidth="200.0" wrapText="true" BorderPane.alignment="CENTER" />
-               </center>
-            </BorderPane>
+            <SplitPane dividerPositions="0.5501567398119123">
+               <items>
+                  <TableView fx:id="tablaPalabras" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" prefHeight="400.0" prefWidth="387.0" stylesheets="@tabla.css">
+                    <columns>
+                        <TableColumn fx:id="columnaFila" prefWidth="75.0" text="Fila" />
+                        <TableColumn fx:id="columnaColumna" prefWidth="75.0" text="Columna" />
+                      <TableColumn fx:id="columnaPalabra" prefWidth="75.0" text="Palabra" />
+                      <TableColumn fx:id="columnaCategoria" prefWidth="75.0" text="Categoría" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <BorderPane>
+                     <bottom>
+                        <Button fx:id="btnIngresar" defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0" mnemonicParsing="false" onAction="#ingresar" text="Ingresar" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <center>
+                        <TextArea fx:id="campoTexto" prefHeight="200.0" prefWidth="200.0" stylesheets="@campotexto.css" wrapText="true" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
+               </items>
+            </SplitPane>
+            <TextArea fx:id="campoErrores" editable="false" prefHeight="245.0" prefWidth="751.0" stylesheets="@campoErrores.css" />
          </items>
       </SplitPane>
   </children>

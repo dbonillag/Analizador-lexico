@@ -2,9 +2,6 @@ package modelo;
 
 import java.util.ArrayList;
 
-
-
-
 public class AnalizadorLexico {
 
 	private String codigoFuente;
@@ -16,9 +13,9 @@ public class AnalizadorLexico {
 	public AnalizadorLexico(String codigoFuente) {
 		this.codigoFuente = codigoFuente;
 		this.listaTokens = new ArrayList<>();
-		this.listaErrores=new ArrayList<>();
+		this.listaErrores = new ArrayList<>();
 		this.caracterActual = codigoFuente.charAt(0);
-		this.finCodigo = '°';
+		this.finCodigo = 'ï¿½';
 	}
 
 	public void analizar() {
@@ -71,9 +68,10 @@ public class AnalizadorLexico {
 				continue;
 			if (esComentarioBloque())
 				continue;
+			if (esCaracter())
+				continue;
 			if (esCadenaDeCaracteres())
 				continue;
-		
 
 			listaTokens.add(new Token(Categoria.DESCONOCIDO, "" + caracterActual, filaActual, columnaActual));
 			obtenerSiguienteCaracter();
@@ -186,18 +184,16 @@ public class AnalizadorLexico {
 			if (Character.isLetter(caracterActual)) {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-				
+
 				while (Character.isLetter(caracterActual)) {
 					palabra += caracterActual;
 					obtenerSiguienteCaracter();
 				}
 
-				
-
 			} else {
 				listaErrores.add(new ErrorLexico("El identificador debe tener al menos una letra", fila, columna));
 			}
-			
+
 			listaTokens.add(new Token(Categoria.IDENTIFICADOR, palabra, fila, columna));
 			return true;
 
@@ -209,44 +205,43 @@ public class AnalizadorLexico {
 
 	public boolean esReservada() {
 
-		
-
 		if (Character.isLetter(caracterActual)) {
 			String palabra = "";
-			String[] reservadas= {"Z","R","rep","regret","cicle","capitalism","communism","con","box","trade","type","destroy"};
+			String[] reservadas = { "Z", "R", "rep", "regret", "cicle", "capitalism", "communism", "con", "box",
+					"trade", "type", "destroy" };
 			int fila = filaActual;
 			int columna = columnaActual;
-			
+
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
-			while(Character.isLetter(caracterActual)) {
-				
+
+			while (Character.isLetter(caracterActual)) {
+
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-				
+
 			}
-			
-			
+
 			for (int i = 0; i < reservadas.length; i++) {
 				if (palabra.equals(reservadas[i])) {
 					listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
 					return true;
 				}
 			}
-			
+
 			return backTracking(palabra, fila, columna);
 		}
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esAritmetico() {
-		if (caracterActual == 'p'||caracterActual == 's'||caracterActual == 'm'||caracterActual == 'd'||caracterActual == 'r') {
+		if (caracterActual == 'p' || caracterActual == 's' || caracterActual == 'm' || caracterActual == 'd'
+				|| caracterActual == 'r') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
-			
+
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
@@ -259,7 +254,7 @@ public class AnalizadorLexico {
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esRelacional() {
 		String palabra = "";
 		int fila = filaActual;
@@ -270,44 +265,44 @@ public class AnalizadorLexico {
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
 
-			if (caracterActual=='=') {
+			if (caracterActual == '=') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-			}else if(caracterActual=='<') {
+			} else if (caracterActual == '<') {
 				return backTracking(palabra, fila, columna);
 			}
-			
+
 			listaTokens.add(new Token(Categoria.RELACIONAL, palabra, fila, columna));
 			return true;
-		}else if (caracterActual == '>') {
+		} else if (caracterActual == '>') {
 
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
 
-			if (caracterActual=='=') {
+			if (caracterActual == '=') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-			}else if(caracterActual=='>') {
+			} else if (caracterActual == '>') {
 				return backTracking(palabra, fila, columna);
 			}
-			
+
 			listaTokens.add(new Token(Categoria.RELACIONAL, palabra, fila, columna));
 			return true;
-		}else if(caracterActual=='='||caracterActual=='~') {
-			
+		} else if (caracterActual == '=' || caracterActual == '~') {
+
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			if (caracterActual=='=') {
+			if (caracterActual == '=') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-				
+
 				listaTokens.add(new Token(Categoria.RELACIONAL, palabra, fila, columna));
 				return true;
-			}else {
+			} else {
 				return backTracking(palabra, fila, columna);
 			}
-			
+
 		}
 
 		// rechazo inmediato
@@ -315,7 +310,7 @@ public class AnalizadorLexico {
 	}
 
 	public boolean esLogico() {
-		if (caracterActual == '^'||caracterActual == '¨') {
+		if (caracterActual == '^' || caracterActual == 'ï¿½') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -327,7 +322,7 @@ public class AnalizadorLexico {
 			listaTokens.add(new Token(Categoria.LOGICO, palabra, fila, columna));
 			return true;
 
-		}else if(caracterActual=='~') {
+		} else if (caracterActual == '~') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -335,13 +330,13 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			if (caracterActual=='=') {
+			if (caracterActual == '=') {
 				return backTracking(palabra, fila, columna);
-			}else {
+			} else {
 				listaTokens.add(new Token(Categoria.LOGICO, palabra, fila, columna));
 				return true;
 			}
-			
+
 		}
 
 		// rechazo inmediato
@@ -357,14 +352,15 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
-			if (caracterActual=='=') {
+
+			if (caracterActual == '=') {
 				return backTracking(palabra, fila, columna);
-			}else {
+			} else {
 				listaTokens.add(new Token(Categoria.ASIGNACION, palabra, fila, columna));
 				return true;
 			}
-		}else if(caracterActual=='-'||caracterActual=='+'||caracterActual=='*'||caracterActual=='/'||caracterActual=='%') {
+		} else if (caracterActual == '-' || caracterActual == '+' || caracterActual == '*' || caracterActual == '/'
+				|| caracterActual == '%') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -372,25 +368,26 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
-			if (caracterActual=='=') {
+
+			if (caracterActual == '=') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-				
-			}else {
-				listaErrores.add(new ErrorLexico("Operador de asignación necesita un = para estar completo", fila, columna));
-				
+
+			} else {
+				listaErrores.add(
+						new ErrorLexico("Operador de asignaciï¿½n necesita un = para estar completo", fila, columna));
+
 			}
-			
+
 			listaTokens.add(new Token(Categoria.ASIGNACION, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esIncremento_Decremento() {
 		if (caracterActual == '<') {
 			String palabra = "";
@@ -400,18 +397,18 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
-			if (caracterActual=='<') {
+
+			if (caracterActual == '<') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-				
+
 				listaTokens.add(new Token(Categoria.INCREMENTO_DECREMENTO, palabra, fila, columna));
 				return true;
-				
-			}else {
+
+			} else {
 				return backTracking(palabra, fila, columna);
 			}
-		}else if (caracterActual == '>') {
+		} else if (caracterActual == '>') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -419,15 +416,15 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
-			if (caracterActual=='>') {
+
+			if (caracterActual == '>') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-				
+
 				listaTokens.add(new Token(Categoria.INCREMENTO_DECREMENTO, palabra, fila, columna));
 				return true;
-				
-			}else {
+
+			} else {
 				return backTracking(palabra, fila, columna);
 			}
 		}
@@ -435,7 +432,7 @@ public class AnalizadorLexico {
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esParentesisApertura() {
 		if (caracterActual == '(') {
 			String palabra = "";
@@ -445,16 +442,16 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.PARENTESIS_APERTURA, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esParentesisCierre() {
 		if (caracterActual == ')') {
 			String palabra = "";
@@ -464,16 +461,16 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.PARENTESIS_CIERRE, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esLlaveApertura() {
 		if (caracterActual == '{') {
 			String palabra = "";
@@ -483,17 +480,16 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.LLAVE_APERTURA, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
-	
+
 	public boolean esLlaveCierre() {
 		if (caracterActual == '}') {
 			String palabra = "";
@@ -503,16 +499,16 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.LLAVE_CIERRE, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esCorcheteApertura() {
 		if (caracterActual == '[') {
 			String palabra = "";
@@ -522,17 +518,16 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.CORCHETE_APERTURA, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
-	
+
 	public boolean esCorcheteCierre() {
 		if (caracterActual == '}') {
 			String palabra = "";
@@ -542,16 +537,16 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.CORCHETE_CIERRE, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esPunto() {
 		if (caracterActual == '.') {
 			String palabra = "";
@@ -561,16 +556,16 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.PUNTO, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esDosPuntos() {
 		if (caracterActual == ':') {
 			String palabra = "";
@@ -580,16 +575,16 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.DOS_PUNTOS, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esTerminal() {
 		if (caracterActual == '!') {
 			String palabra = "";
@@ -599,16 +594,16 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.TERMINAL, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esSeparador() {
 		if (caracterActual == ',') {
 			String palabra = "";
@@ -618,124 +613,168 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
+
 			listaTokens.add(new Token(Categoria.SEPARADOR, palabra, fila, columna));
 			return true;
-			
+
 		}
 
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esComentarioLinea() {
-		if (caracterActual=='¿') {
+		if (caracterActual == 'ï¿½') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
-	
+
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-			
-			if(caracterActual=='¿') {
+
+			if (caracterActual == 'ï¿½') {
 				backTracking(palabra, fila, columna);
-			}else {
-				while (caracterActual!='\n'&&caracterActual!=finCodigo) {
+			} else {
+				while (caracterActual != '\n' && caracterActual != finCodigo) {
 					palabra += caracterActual;
 					obtenerSiguienteCaracter();
-		
+
 				}
-				
+
 				listaTokens.add(new Token(Categoria.COMENTARIO_LINEA, palabra, fila, columna));
 				return true;
-			}	
+			}
 		}
 		// rechazo inmediato
 		return false;
 	}
-	
+
 	public boolean esComentarioBloque() {
-		if (caracterActual=='¿') {
+		if (caracterActual == 'ï¿½') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
-	
+
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-	
-			if(caracterActual=='¿') {
-				
-				
-				while (caracterActual!=finCodigo) {
+
+			if (caracterActual == 'ï¿½') {
+
+				while (caracterActual != finCodigo) {
 					palabra += caracterActual;
 					obtenerSiguienteCaracter();
-					if (caracterActual=='?') {
+					if (caracterActual == '?') {
 						palabra += caracterActual;
 						obtenerSiguienteCaracter();
-						if (caracterActual=='?') {
+						if (caracterActual == '?') {
 							palabra += caracterActual;
 							obtenerSiguienteCaracter();
 							listaTokens.add(new Token(Categoria.COMENTARIO_BLOQUE, palabra, fila, columna));
 							return true;
 						}
-						
+
 					}
-		
+
 				}
-				
+
 				listaErrores.add(new ErrorLexico("Comentario de bloque no ha sido cerrado", fila, columna));
 				listaTokens.add(new Token(Categoria.COMENTARIO_BLOQUE, palabra, fila, columna));
 				return true;
-			}else {
+			} else {
 				return backTracking(palabra, fila, columna);
 			}
-			
-			
+
+		}
+		// rechazo inmediato
+		return false;
+	}
+
+	public boolean esCaracter() {
+		if (caracterActual == '\'') {
+			String palabra = "";
+			int fila = filaActual;
+			int columna = columnaActual;
+
+			// transicion
+			palabra += caracterActual;
+			obtenerSiguienteCaracter();
+
+			if (caracterActual == '\\') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+
+				if (caracterActual == '\'' || caracterActual == '\\' || caracterActual == 't' || caracterActual == 'b'
+						|| caracterActual == 'r' || caracterActual == 'f' || caracterActual == 'n') {
+
+					palabra += caracterActual;
+					obtenerSiguienteCaracter();
+
+				} else {
+
+					listaErrores.add(new ErrorLexico("caracter despues del backslash invalido", fila, columna));
+
+				}
+			} else {
+
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+
+			}
+
+			if (caracterActual == '\'') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+
+			} else {
+				// backTracking
+				listaErrores.add(new ErrorLexico("Falta ' para finalizar el caracter", fila, columna));
+			}
+			listaTokens.add(new Token(Categoria.CARACTER, palabra, fila, columna));
+			return true;
 		}
 		// rechazo inmediato
 		return false;
 	}
 
 	public boolean esCadenaDeCaracteres() {
-		if (caracterActual=='"') {
+		if (caracterActual == '"') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
-	
+
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
-	
-			
-			
-			while (caracterActual!='"'&&caracterActual!=finCodigo&&caracterActual!='\n') {
-				if (caracterActual=='\\') {
+
+			while (caracterActual != '"' && caracterActual != finCodigo && caracterActual != '\n') {
+				if (caracterActual == '\\') {
 					palabra += caracterActual;
 					obtenerSiguienteCaracter();
-					if (caracterActual=='"'||caracterActual=='\\'||caracterActual=='t'||caracterActual=='b'||caracterActual=='r'||caracterActual=='f'||caracterActual=='n') {
+					if (caracterActual == '"' || caracterActual == '\\' || caracterActual == 't'
+							|| caracterActual == 'b' || caracterActual == 'r' || caracterActual == 'f'
+							|| caracterActual == 'n') {
 						palabra += caracterActual;
 						obtenerSiguienteCaracter();
-					}else {
+					} else {
 
 						listaErrores.add(new ErrorLexico("caracter despues del backslash invalido", fila, columna));
-						
+
 					}
-				}else {
-					
+				} else {
+
 					palabra += caracterActual;
 					obtenerSiguienteCaracter();
-					
-				}		
+
+				}
 			}
-			
+
 			if (caracterActual == '"') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
-				
-				
-			}else{
+
+			} else {
 				// backTracking
 				listaErrores.add(new ErrorLexico("Falta \" para finalizar la cadena", fila, columna));
 			}
@@ -769,8 +808,6 @@ public class AnalizadorLexico {
 		}
 
 	}
-	
-	
 
 	/**
 	 * @return the listaTokens
