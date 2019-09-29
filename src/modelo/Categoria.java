@@ -25,11 +25,7 @@ public enum Categoria {
 	PUNTO, 
 	DOS_PUNTOS,
 	COMENTARIO_LINEA,
-<<<<<<< HEAD
 	COMENTARIO_BLOQUE,
 	CARACTER
-=======
-	COMENTARIO_BLOQUE
->>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	
 }
