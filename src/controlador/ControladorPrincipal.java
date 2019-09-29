@@ -17,6 +17,7 @@ import modelo.AnalizadorLexico;
 import modelo.ErrorLexico;
 import modelo.Token;
 import modelo.TokenObservable;
+import sintaxis.AnalizadorSintactico;
 
 public class ControladorPrincipal {
 
@@ -43,9 +44,9 @@ public class ControladorPrincipal {
 
 	@FXML // fx:id="campoTexto"
 	private TextArea campoTexto; // Value injected by FXMLLoader
-	
-    @FXML // fx:id="campoErrores"
-    private TextArea campoErrores; // Value injected by FXMLLoader
+
+	@FXML // fx:id="campoErrores"
+	private TextArea campoErrores; // Value injected by FXMLLoader
 
 	@FXML // fx:id="tablaPalabras"
 	private TableView<TokenObservable> tablaPalabras; // Value injected by FXMLLoader
@@ -80,16 +81,20 @@ public class ControladorPrincipal {
 	@FXML
 	void ingresar(ActionEvent event) {
 
-		AnalizadorLexico analizador = new AnalizadorLexico(campoTexto.getText());
-		analizador.analizar();
-		actualizarTabla(analizador.getListaTokens());
-		campoErrores.setText("");
-		for (ErrorLexico error : analizador.getListaErrores()) {
-			campoErrores.appendText(error.toString()+"\n");
-		}
+		// Analisis Lexico
+		AnalizadorLexico analizadorLexico = new AnalizadorLexico(campoTexto.getText());
+		analizadorLexico.analizar();
+		// actualizarTabla(analizadorLexico.getListaTokens());
+		// for (ErrorLexico error : analizadorLexico.getListaErrores()) {
+		// campoErrores.appendText(error.toString()+"\n");
+		// }
 
-		
-		System.out.println(analizador.getListaTokens().toString());
+		// Analisis Sintactico
+		AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getListaTokens());
+		AnalizadorSintactico.analizar();
+
+		campoErrores.setText("");
+
 	}
 
 }
