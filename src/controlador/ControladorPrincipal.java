@@ -17,7 +17,10 @@ import modelo.AnalizadorLexico;
 import modelo.ErrorLexico;
 import modelo.Token;
 import modelo.TokenObservable;
+<<<<<<< HEAD
 import sintaxis.AnalizadorSintactico;
+=======
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 
 public class ControladorPrincipal {
 
@@ -44,9 +47,15 @@ public class ControladorPrincipal {
 
 	@FXML // fx:id="campoTexto"
 	private TextArea campoTexto; // Value injected by FXMLLoader
+<<<<<<< HEAD
 
 	@FXML // fx:id="campoErrores"
 	private TextArea campoErrores; // Value injected by FXMLLoader
+=======
+	
+    @FXML // fx:id="campoErrores"
+    private TextArea campoErrores; // Value injected by FXMLLoader
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 
 	@FXML // fx:id="tablaPalabras"
 	private TableView<TokenObservable> tablaPalabras; // Value injected by FXMLLoader
@@ -81,6 +90,7 @@ public class ControladorPrincipal {
 	@FXML
 	void ingresar(ActionEvent event) {
 
+<<<<<<< HEAD
 		// Analisis Lexico
 		AnalizadorLexico analizadorLexico = new AnalizadorLexico(campoTexto.getText());
 		analizadorLexico.analizar();
@@ -95,6 +105,18 @@ public class ControladorPrincipal {
 
 		campoErrores.setText("");
 
+=======
+		AnalizadorLexico analizador = new AnalizadorLexico(campoTexto.getText());
+		analizador.analizar();
+		actualizarTabla(analizador.getListaTokens());
+		campoErrores.setText("");
+		for (ErrorLexico error : analizador.getListaErrores()) {
+			campoErrores.appendText(error.toString()+"\n");
+		}
+
+		
+		System.out.println(analizador.getListaTokens().toString());
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	}
 
 }

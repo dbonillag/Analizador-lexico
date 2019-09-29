@@ -1,5 +1,6 @@
 package sintaxis;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 
 import modelo.Categoria;
@@ -53,4 +54,8 @@ public class Funcion {
 		this.bloqueSentencias = bloqueSentencias;
 	}
 
+=======
+public class Funcion {
+
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 }

@@ -2,6 +2,12 @@ package modelo;
 
 import java.util.ArrayList;
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 public class AnalizadorLexico {
 
 	private String codigoFuente;
@@ -13,9 +19,15 @@ public class AnalizadorLexico {
 	public AnalizadorLexico(String codigoFuente) {
 		this.codigoFuente = codigoFuente;
 		this.listaTokens = new ArrayList<>();
+<<<<<<< HEAD
 		this.listaErrores = new ArrayList<>();
 		this.caracterActual = codigoFuente.charAt(0);
 		this.finCodigo = 'Â°';
+=======
+		this.listaErrores=new ArrayList<>();
+		this.caracterActual = codigoFuente.charAt(0);
+		this.finCodigo = '°';
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	}
 
 	public void analizar() {
@@ -68,10 +80,16 @@ public class AnalizadorLexico {
 				continue;
 			if (esComentarioBloque())
 				continue;
+<<<<<<< HEAD
 			if (esCaracter())
 				continue;
 			if (esCadenaDeCaracteres())
 				continue;
+=======
+			if (esCadenaDeCaracteres())
+				continue;
+		
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 
 			listaTokens.add(new Token(Categoria.DESCONOCIDO, "" + caracterActual, filaActual, columnaActual));
 			obtenerSiguienteCaracter();
@@ -184,16 +202,29 @@ public class AnalizadorLexico {
 			if (Character.isLetter(caracterActual)) {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
+=======
+				
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 				while (Character.isLetter(caracterActual)) {
 					palabra += caracterActual;
 					obtenerSiguienteCaracter();
 				}
 
+<<<<<<< HEAD
 			} else {
 				listaErrores.add(new ErrorLexico("El identificador debe tener al menos una letra", fila, columna));
 			}
 
+=======
+				
+
+			} else {
+				listaErrores.add(new ErrorLexico("El identificador debe tener al menos una letra", fila, columna));
+			}
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 			listaTokens.add(new Token(Categoria.IDENTIFICADOR, palabra, fila, columna));
 			return true;
 
@@ -203,6 +234,7 @@ public class AnalizadorLexico {
 		return false;
 	}
 
+<<<<<<< HEAD
 	
 	/**
 	 * Z : NATURAL
@@ -240,18 +272,46 @@ public class AnalizadorLexico {
 
 			}
 
+=======
+	public boolean esReservada() {
+
+		
+
+		if (Character.isLetter(caracterActual)) {
+			String palabra = "";
+			String[] reservadas= {"Z","R","rep","regret","cicle","capitalism","communism","con","box","trade","type","destroy"};
+			int fila = filaActual;
+			int columna = columnaActual;
+			
+			palabra += caracterActual;
+			obtenerSiguienteCaracter();
+			
+			while(Character.isLetter(caracterActual)) {
+				
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+				
+			}
+			
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 			for (int i = 0; i < reservadas.length; i++) {
 				if (palabra.equals(reservadas[i])) {
 					listaTokens.add(new Token(Categoria.RESERVADA, palabra, fila, columna));
 					return true;
 				}
 			}
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 			return backTracking(palabra, fila, columna);
 		}
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
 	public boolean esAritmetico() {
 		if (caracterActual == 'p' || caracterActual == 's' || caracterActual == 'm' || caracterActual == 'd'
@@ -260,6 +320,15 @@ public class AnalizadorLexico {
 			int fila = filaActual;
 			int columna = columnaActual;
 
+=======
+	
+	public boolean esAritmetico() {
+		if (caracterActual == 'p'||caracterActual == 's'||caracterActual == 'm'||caracterActual == 'd'||caracterActual == 'r') {
+			String palabra = "";
+			int fila = filaActual;
+			int columna = columnaActual;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
@@ -272,7 +341,11 @@ public class AnalizadorLexico {
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esRelacional() {
 		String palabra = "";
 		int fila = filaActual;
@@ -283,6 +356,7 @@ public class AnalizadorLexico {
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
 
+<<<<<<< HEAD
 			if (caracterActual == '=') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
@@ -293,11 +367,24 @@ public class AnalizadorLexico {
 			listaTokens.add(new Token(Categoria.RELACIONAL, palabra, fila, columna));
 			return true;
 		} else if (caracterActual == '>') {
+=======
+			if (caracterActual=='=') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+			}else if(caracterActual=='<') {
+				return backTracking(palabra, fila, columna);
+			}
+			
+			listaTokens.add(new Token(Categoria.RELACIONAL, palabra, fila, columna));
+			return true;
+		}else if (caracterActual == '>') {
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
 
+<<<<<<< HEAD
 			if (caracterActual == '=') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
@@ -321,6 +408,31 @@ public class AnalizadorLexico {
 				return backTracking(palabra, fila, columna);
 			}
 
+=======
+			if (caracterActual=='=') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+			}else if(caracterActual=='>') {
+				return backTracking(palabra, fila, columna);
+			}
+			
+			listaTokens.add(new Token(Categoria.RELACIONAL, palabra, fila, columna));
+			return true;
+		}else if(caracterActual=='='||caracterActual=='~') {
+			
+			palabra += caracterActual;
+			obtenerSiguienteCaracter();
+			if (caracterActual=='=') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+				
+				listaTokens.add(new Token(Categoria.RELACIONAL, palabra, fila, columna));
+				return true;
+			}else {
+				return backTracking(palabra, fila, columna);
+			}
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
@@ -328,7 +440,11 @@ public class AnalizadorLexico {
 	}
 
 	public boolean esLogico() {
+<<<<<<< HEAD
 		if (caracterActual == '^' || caracterActual == 'Â¨') {
+=======
+		if (caracterActual == '^'||caracterActual == '¨') {
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -340,7 +456,11 @@ public class AnalizadorLexico {
 			listaTokens.add(new Token(Categoria.LOGICO, palabra, fila, columna));
 			return true;
 
+<<<<<<< HEAD
 		} else if (caracterActual == '~') {
+=======
+		}else if(caracterActual=='~') {
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -348,6 +468,7 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 			if (caracterActual == '=') {
 				return backTracking(palabra, fila, columna);
 			} else {
@@ -355,6 +476,15 @@ public class AnalizadorLexico {
 				return true;
 			}
 
+=======
+			if (caracterActual=='=') {
+				return backTracking(palabra, fila, columna);
+			}else {
+				listaTokens.add(new Token(Categoria.LOGICO, palabra, fila, columna));
+				return true;
+			}
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
@@ -370,6 +500,7 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			if (caracterActual == '=') {
 				return backTracking(palabra, fila, columna);
@@ -379,6 +510,16 @@ public class AnalizadorLexico {
 			}
 		} else if (caracterActual == '-' || caracterActual == '+' || caracterActual == '*' || caracterActual == '/'
 				|| caracterActual == '%') {
+=======
+			
+			if (caracterActual=='=') {
+				return backTracking(palabra, fila, columna);
+			}else {
+				listaTokens.add(new Token(Categoria.ASIGNACION, palabra, fila, columna));
+				return true;
+			}
+		}else if(caracterActual=='-'||caracterActual=='+'||caracterActual=='*'||caracterActual=='/'||caracterActual=='%') {
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -386,6 +527,7 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			if (caracterActual == '=') {
 				palabra += caracterActual;
@@ -400,12 +542,31 @@ public class AnalizadorLexico {
 			listaTokens.add(new Token(Categoria.ASIGNACION, palabra, fila, columna));
 			return true;
 
+=======
+			
+			if (caracterActual=='=') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+				
+			}else {
+				listaErrores.add(new ErrorLexico("Operador de asignación necesita un = para estar completo", fila, columna));
+				
+			}
+			
+			listaTokens.add(new Token(Categoria.ASIGNACION, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esIncremento_Decremento() {
 		if (caracterActual == '<') {
 			String palabra = "";
@@ -415,6 +576,7 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			if (caracterActual == '<') {
 				palabra += caracterActual;
@@ -427,6 +589,20 @@ public class AnalizadorLexico {
 				return backTracking(palabra, fila, columna);
 			}
 		} else if (caracterActual == '>') {
+=======
+			
+			if (caracterActual=='<') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+				
+				listaTokens.add(new Token(Categoria.INCREMENTO_DECREMENTO, palabra, fila, columna));
+				return true;
+				
+			}else {
+				return backTracking(palabra, fila, columna);
+			}
+		}else if (caracterActual == '>') {
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;
@@ -434,6 +610,7 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			if (caracterActual == '>') {
 				palabra += caracterActual;
@@ -443,6 +620,17 @@ public class AnalizadorLexico {
 				return true;
 
 			} else {
+=======
+			
+			if (caracterActual=='>') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+				
+				listaTokens.add(new Token(Categoria.INCREMENTO_DECREMENTO, palabra, fila, columna));
+				return true;
+				
+			}else {
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 				return backTracking(palabra, fila, columna);
 			}
 		}
@@ -450,7 +638,11 @@ public class AnalizadorLexico {
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esParentesisApertura() {
 		if (caracterActual == '(') {
 			String palabra = "";
@@ -460,16 +652,27 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.PARENTESIS_APERTURA, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.PARENTESIS_APERTURA, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esParentesisCierre() {
 		if (caracterActual == ')') {
 			String palabra = "";
@@ -479,16 +682,27 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.PARENTESIS_CIERRE, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.PARENTESIS_CIERRE, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esLlaveApertura() {
 		if (caracterActual == '{') {
 			String palabra = "";
@@ -498,16 +712,28 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.LLAVE_APERTURA, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.LLAVE_APERTURA, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esLlaveCierre() {
 		if (caracterActual == '}') {
 			String palabra = "";
@@ -517,16 +743,27 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.LLAVE_CIERRE, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.LLAVE_CIERRE, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esCorcheteApertura() {
 		if (caracterActual == '[') {
 			String palabra = "";
@@ -536,16 +773,28 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.CORCHETE_APERTURA, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.CORCHETE_APERTURA, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esCorcheteCierre() {
 		if (caracterActual == '}') {
 			String palabra = "";
@@ -555,16 +804,27 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.CORCHETE_CIERRE, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.CORCHETE_CIERRE, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esPunto() {
 		if (caracterActual == '.') {
 			String palabra = "";
@@ -574,16 +834,27 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.PUNTO, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.PUNTO, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esDosPuntos() {
 		if (caracterActual == ':') {
 			String palabra = "";
@@ -593,16 +864,27 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.DOS_PUNTOS, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.DOS_PUNTOS, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esTerminal() {
 		if (caracterActual == '!') {
 			String palabra = "";
@@ -612,16 +894,27 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.TERMINAL, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.TERMINAL, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 	public boolean esSeparador() {
 		if (caracterActual == ',') {
 			String palabra = "";
@@ -631,15 +924,23 @@ public class AnalizadorLexico {
 			// transicion
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
+<<<<<<< HEAD
 
 			listaTokens.add(new Token(Categoria.SEPARADOR, palabra, fila, columna));
 			return true;
 
+=======
+			
+			listaTokens.add(new Token(Categoria.SEPARADOR, palabra, fila, columna));
+			return true;
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
 	public boolean esComentarioLinea() {
 		if (caracterActual == 'Â¿') {
@@ -663,10 +964,36 @@ public class AnalizadorLexico {
 				listaTokens.add(new Token(Categoria.COMENTARIO_LINEA, palabra, fila, columna));
 				return true;
 			}
+=======
+	
+	public boolean esComentarioLinea() {
+		if (caracterActual=='¿') {
+			String palabra = "";
+			int fila = filaActual;
+			int columna = columnaActual;
+	
+			// transicion
+			palabra += caracterActual;
+			obtenerSiguienteCaracter();
+			
+			if(caracterActual=='¿') {
+				backTracking(palabra, fila, columna);
+			}else {
+				while (caracterActual!='\n'&&caracterActual!=finCodigo) {
+					palabra += caracterActual;
+					obtenerSiguienteCaracter();
+		
+				}
+				
+				listaTokens.add(new Token(Categoria.COMENTARIO_LINEA, palabra, fila, columna));
+				return true;
+			}	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 		// rechazo inmediato
 		return false;
 	}
+<<<<<<< HEAD
 
 	public boolean esComentarioBloque() {
 		if (caracterActual == 'Â¿') {
@@ -753,12 +1080,53 @@ public class AnalizadorLexico {
 
 			listaTokens.add(new Token(Categoria.CARACTER, palabra, fila, columna));
 			return true;
+=======
+	
+	public boolean esComentarioBloque() {
+		if (caracterActual=='¿') {
+			String palabra = "";
+			int fila = filaActual;
+			int columna = columnaActual;
+	
+			// transicion
+			palabra += caracterActual;
+			obtenerSiguienteCaracter();
+	
+			if(caracterActual=='¿') {
+				
+				
+				while (caracterActual!=finCodigo) {
+					palabra += caracterActual;
+					obtenerSiguienteCaracter();
+					if (caracterActual=='?') {
+						palabra += caracterActual;
+						obtenerSiguienteCaracter();
+						if (caracterActual=='?') {
+							palabra += caracterActual;
+							obtenerSiguienteCaracter();
+							
+						}
+						
+					}
+		
+				}
+				
+				listaErrores.add(new ErrorLexico("Comentario de bloque no ha sido cerrado", fila, columna));
+				listaTokens.add(new Token(Categoria.COMENTARIO_BLOQUE, palabra, fila, columna));
+				return true;
+			}else {
+				return backTracking(palabra, fila, columna);
+			}
+			
+			
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 		}
 		// rechazo inmediato
 		return false;
 	}
 
 	public boolean esCadenaDeCaracteres() {
+<<<<<<< HEAD
 		if (caracterActual == '"') {
 			String palabra = "";
 			int fila = filaActual;
@@ -795,6 +1163,46 @@ public class AnalizadorLexico {
 				obtenerSiguienteCaracter();
 
 			} else {
+=======
+		if (caracterActual=='"') {
+			String palabra = "";
+			int fila = filaActual;
+			int columna = columnaActual;
+	
+			// transicion
+			palabra += caracterActual;
+			obtenerSiguienteCaracter();
+	
+			
+			
+			while (caracterActual!='"'&&caracterActual!=finCodigo&&caracterActual!='\n') {
+				if (caracterActual=='\\') {
+					palabra += caracterActual;
+					obtenerSiguienteCaracter();
+					if (caracterActual=='\''||caracterActual=='"'||caracterActual=='\\'||caracterActual=='t'||caracterActual=='b'||caracterActual=='r'||caracterActual=='f'||caracterActual=='n') {
+						palabra += caracterActual;
+						obtenerSiguienteCaracter();
+					}else if(caracterActual=='\'') {
+						
+						
+						listaErrores.add(new ErrorLexico("caracter despues del backslash invalido", fila, columna));
+						
+					}
+				}else {
+					
+					palabra += caracterActual;
+					obtenerSiguienteCaracter();
+					
+				}		
+			}
+			
+			if (caracterActual == '"') {
+				palabra += caracterActual;
+				obtenerSiguienteCaracter();
+				
+				
+			}else{
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 				// backTracking
 				listaErrores.add(new ErrorLexico("Falta \" para finalizar la cadena", fila, columna));
 			}
@@ -828,6 +1236,11 @@ public class AnalizadorLexico {
 		}
 
 	}
+<<<<<<< HEAD
+=======
+	
+	
+>>>>>>> parent of 79a2af7... Falto meter estos archivos al commit anterior GG
 
 	/**
 	 * @return the listaTokens
