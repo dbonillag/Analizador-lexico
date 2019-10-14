@@ -203,12 +203,34 @@ public class AnalizadorLexico {
 		return false;
 	}
 
+	
+	/**
+	 * Z : NATURAL
+	 * R : REAL 
+	 * regret : RETURN
+	 * cicle : WHILE
+	 * con : IF
+	 * start : main
+	 * bin : Boolean
+	 * void : void
+	 * text : String
+	 * char : char
+	 * list : arreglo
+	 * show : imprimir
+	 * read : leer
+	 * pika : no hace nada
+	 */
+	
+	// <TipoRetorno> ::=Z | R | bin | void | text | char
 	public boolean esReservada() {
-
+		
+		
+		
+		
 		if (Character.isLetter(caracterActual)) {
 			String palabra = "";
-			String[] reservadas = { "Z", "R", "rep", "regret", "cicle", "capitalism", "communism", "con", "box",
-					"trade", "type", "destroy" };
+			String[] reservadas = { "Z", "R", "regret", "cicle", "con","start",
+					"bin","void","text","char","list","show","read","pika"};
 			int fila = filaActual;
 			int columna = columnaActual;
 
@@ -701,28 +723,29 @@ public class AnalizadorLexico {
 			palabra += caracterActual;
 			obtenerSiguienteCaracter();
 
-			if (caracterActual == '\\') {
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-
-				if (caracterActual == '\'' || caracterActual == '\\' || caracterActual == 't' || caracterActual == 'b'
-						|| caracterActual == 'r' || caracterActual == 'f' || caracterActual == 'n') {
-
+			if (caracterActual != '\'' && caracterActual != finCodigo && caracterActual != '\n') {
+				if (caracterActual == '\\') {
 					palabra += caracterActual;
 					obtenerSiguienteCaracter();
 
+					if (caracterActual == '\'' || caracterActual == '\\' || caracterActual == 't'
+							|| caracterActual == 'b' || caracterActual == 'r' || caracterActual == 'f'
+							|| caracterActual == 'n') {
+
+						palabra += caracterActual;
+						obtenerSiguienteCaracter();
+
+					} else {
+
+						listaErrores.add(new ErrorLexico("caracter despues del backslash invalido", fila, columna));
+
+					}
 				} else {
 
-					listaErrores.add(new ErrorLexico("caracter despues del backslash invalido", fila, columna));
-
+					palabra += caracterActual;
+					obtenerSiguienteCaracter();
 				}
-			} else {
-
-				palabra += caracterActual;
-				obtenerSiguienteCaracter();
-
 			}
-
 			if (caracterActual == '\'') {
 				palabra += caracterActual;
 				obtenerSiguienteCaracter();
@@ -731,6 +754,7 @@ public class AnalizadorLexico {
 				// backTracking
 				listaErrores.add(new ErrorLexico("Falta ' para finalizar el caracter", fila, columna));
 			}
+
 			listaTokens.add(new Token(Categoria.CARACTER, palabra, fila, columna));
 			return true;
 		}
