@@ -13,10 +13,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import modelo.AnalizadorLexico;
-import modelo.ErrorLexico;
-import modelo.Token;
-import modelo.TokenObservable;
+import lexico.AnalizadorLexico;
+import lexico.ErrorLexico;
+import lexico.Token;
+import lexico.TokenObservable;
 import sintaxis.AnalizadorSintactico;
 
 public class ControladorPrincipal {

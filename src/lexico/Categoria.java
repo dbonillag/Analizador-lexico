@@ -1,4 +1,4 @@
-package modelo;
+package lexico;
 
 public enum Categoria {
 

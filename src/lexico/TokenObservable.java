@@ -1,4 +1,4 @@
-package modelo;
+package lexico;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
