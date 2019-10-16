@@ -1,6 +1,6 @@
 package sintaxis;
 
-import modelo.Token;
+import lexico.Token;
 
 public class Parametro {
 

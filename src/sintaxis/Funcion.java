@@ -2,8 +2,8 @@ package sintaxis;
 
 import java.util.ArrayList;
 
-import modelo.Categoria;
-import modelo.Token;
+import lexico.Categoria;
+import lexico.Token;
 
 public class Funcion {
 

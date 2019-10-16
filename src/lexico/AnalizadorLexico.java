@@ -1,4 +1,4 @@
-package modelo;
+package lexico;
 
 import java.util.ArrayList;
 
