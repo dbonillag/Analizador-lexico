@@ -13,6 +13,8 @@ public class AnalizadorSintactico {
 
 	public AnalizadorSintactico(ArrayList<Token> listaTokens) {
 		this.listaTokens = listaTokens;
+		this.tokenActual = listaTokens.get(posActual);
+		listaErrores = new ArrayList<ErrorSintactico>();
 	}
 
 	/**
@@ -68,7 +70,7 @@ public class AnalizadorSintactico {
 						obtenerSiguienteToken();
 
 						ArrayList<Parametro> parametros = esListaParametros();
-
+						System.out.println("este " + tokenActual);
 						if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
 							obtenerSiguienteToken();
 
@@ -81,7 +83,7 @@ public class AnalizadorSintactico {
 							if (bloqueSentencias != null) {
 								return new Funcion(nombre, parametros, tipoRetorno, bloqueSentencias);
 							} else {
-								reportarError("Faltó el bloque de sentancias en la función");
+								reportarError("Faltó el bloque de sentencias en la función");
 							}
 
 						} else {
@@ -100,35 +102,31 @@ public class AnalizadorSintactico {
 		}
 
 		return null;
+
 	}
 
 	/**
-	 * <ListaParametros> ::= <Parametro>[<ListaParametros>]
+	 * <ListaParametros> :== <Parametro> [","<ListaParametros>]
 	 * 
-	 * @return ArrayList<Parametro>
+	 * @return
 	 */
 	public ArrayList<Parametro> esListaParametros() {
 
-		if (esParametro() == null) {
+		ArrayList<Parametro> lista = new ArrayList<>();
+		Parametro param = esParametro();
 
-			ArrayList<Parametro> lista = new ArrayList<>();
-			Parametro parametro = esParametro();
-			lista.add(parametro);
-			obtenerSiguienteToken();
+		if (param != null) {
 
-			while (tokenActual.getPalabra().equals(",")) {
+			lista.add(param);
+
+			if (tokenActual.getPalabra().equals(",")) {
 				obtenerSiguienteToken();
-
-				parametro = esParametro();
-				lista.add(parametro);
-
-				obtenerSiguienteToken();
+				lista.addAll(esListaParametros());
 			}
 
-			return lista;
 		}
 
-		return null;
+		return lista;
 	}
 
 	/**
@@ -159,20 +157,43 @@ public class AnalizadorSintactico {
 	 * @return ArrayList<Sentencia>
 	 */
 	public ArrayList<Sentencia> esBloqueDeSentencias() {
-
+		System.out.println("entra a esBloqueSentencias()");
 		if (tokenActual.getCategoria() == Categoria.LLAVE_APERTURA) {
 			obtenerSiguienteToken();
+			ArrayList<Sentencia> listaSentencias = new ArrayList<>();
 
-			ArrayList<Sentencia> sentencias = esBloqueDeSentencias();
+			Sentencia sentencia = esSentencia();
 
+			while (sentencia != null) {
+				listaSentencias.add(sentencia);
+				sentencia = esSentencia();
+			}
 			if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
 				obtenerSiguienteToken();
-				return sentencias;
+				return listaSentencias;
 			} else {
 				reportarError("Falta llave derecha");
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * <ListaSentencias> ::= <Sentencia>[<ListaSentencias>]
+	 * 
+	 * @return
+	 */
+	public ArrayList<Sentencia> esListaSentencias() {
+		ArrayList<Sentencia> lista = new ArrayList<>();
+
+		Sentencia sentencia = esSentencia();
+
+		while (sentencia != null) {
+			lista.add(sentencia);
+			sentencia = esSentencia();
+		}
+
+		return lista;
 	}
 
 	/**
@@ -228,7 +249,6 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * No sé si hay que hacer este metodo teniendo ya el esTipoRetorno()
 	 * 
 	 * @return
 	 */
@@ -481,9 +501,9 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * <Asignacion> ::= identificador operadorAsignacion <Expresion>
+	 * <Asignacion> ::= identificador operadorAsignacion <Expresion> "!"
 	 * 
-	 * @return Asignacion
+	 * @return
 	 */
 	public Asignacion esAsignacion() {
 
@@ -499,7 +519,7 @@ public class AnalizadorSintactico {
 
 				if (exp != null) {
 
-					if (tokenActual.getPalabra().equals("\n")) {
+					if (tokenActual.getCategoria() == Categoria.TERMINAL) {
 						obtenerSiguienteToken();
 						return new Asignacion(identificador, operador, exp);
 					} else {
@@ -556,11 +576,9 @@ public class AnalizadorSintactico {
 	}
 
 	public void reportarError(String mensaje) {
+		System.out.println(mensaje);
+		System.out.println(tokenActual.getFila() + " " + tokenActual.getColumna());
 		listaErrores.add(new ErrorSintactico(mensaje, tokenActual.getFila(), tokenActual.getColumna()));
-	}
-
-	public void analizar() {
-		// TODO auto-generated method stub
 	}
 
 }

@@ -203,34 +203,19 @@ public class AnalizadorLexico {
 		return false;
 	}
 
-	
 	/**
-	 * Z : NATURAL
-	 * R : REAL 
-	 * regret : RETURN
-	 * cicle : WHILE
-	 * con : IF
-	 * start : main
-	 * bin : Boolean
-	 * void : void
-	 * text : String
-	 * char : char
-	 * list : arreglo
-	 * show : imprimir
-	 * read : leer
-	 * pika : no hace nada
+	 * Z : NATURAL R : REAL regret : RETURN cicle : WHILE con : IF start : main bin
+	 * : Boolean void : void text : String char : char list : arreglo show :
+	 * imprimir read : leer pika : no hace nada method : funcion
 	 */
-	
+
 	// <TipoRetorno> ::=Z | R | bin | void | text | char
 	public boolean esReservada() {
-		
-		
-		
-		
+
 		if (Character.isLetter(caracterActual)) {
 			String palabra = "";
-			String[] reservadas = { "Z", "R", "regret", "cicle", "con","start",
-					"bin","void","text","char","list","show","read","pika"};
+			String[] reservadas = { "method", "Z", "R", "regret", "cicle", "con", "start", "bin", "void", "text",
+					"char", "list", "show", "read", "pika" };
 			int fila = filaActual;
 			int columna = columnaActual;
 

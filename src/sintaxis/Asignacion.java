@@ -1,5 +1,6 @@
 package sintaxis;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import lexico.Token;
 
 public class Asignacion extends Sentencia {
@@ -19,6 +20,11 @@ public class Asignacion extends Sentencia {
 	public String toString() {
 		return "Asignacion [indentificador=" + indentificador + ", operadorAsignacion=" + operadorAsignacion
 				+ ", expresion=" + expresion + "]";
+	}
+
+	@Override
+	public DefaultMutableTreeNode getArbolVisual() {
+		return new DefaultMutableTreeNode("Asignación");
 	}
 
 }

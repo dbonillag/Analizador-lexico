@@ -5,12 +5,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="634.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.ControladorPrincipal">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="697.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.ControladorPrincipal">
   <children>
-      <SplitPane dividerPositions="0.770940170940171" orientation="VERTICAL" VBox.vgrow="ALWAYS">
+      <SplitPane dividerPositions="0.5937320299022426" orientation="VERTICAL" VBox.vgrow="ALWAYS">
          <items>
             <SplitPane dividerPositions="0.5501567398119123">
                <items>
@@ -35,7 +36,12 @@
                   </BorderPane>
                </items>
             </SplitPane>
-            <TextArea fx:id="campoErrores" editable="false" prefHeight="245.0" prefWidth="751.0" stylesheets="@campoErrores.css" />
+            <SplitPane dividerPositions="0.5505671077504726">
+               <items>
+                  <TextArea fx:id="campoErrores" editable="false" prefHeight="245.0" prefWidth="751.0" stylesheets="@campoErrores.css" />
+                  <TreeView fx:id="arbolVisual" prefHeight="200.0" prefWidth="200.0" />
+               </items>
+            </SplitPane>
          </items>
       </SplitPane>
   </children>

@@ -1,7 +1,8 @@
 package sintaxis;
 
-public class Sentencia {
+import javax.swing.tree.DefaultMutableTreeNode;
 
-	// Que lleva una sentencia?
-	
+public abstract class Sentencia {
+
+	public abstract DefaultMutableTreeNode getArbolVisual();
 }

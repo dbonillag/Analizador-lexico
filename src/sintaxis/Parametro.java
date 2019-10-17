@@ -1,5 +1,8 @@
 package sintaxis;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import javafx.scene.control.TreeItem;
 import lexico.Token;
 
 public class Parametro {
@@ -29,4 +32,7 @@ public class Parametro {
 		this.nombre = nombre;
 	}
 
+	public TreeItem<String> getArbolVisual() {
+		return new TreeItem(nombre.getPalabra() + " : " + tipoDato.getPalabra());
+	}
 }

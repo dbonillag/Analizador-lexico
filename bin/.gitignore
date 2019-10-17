@@ -1,6 +1,6 @@
 /Sintaxis.class
-/sintaxis/
-/Lexico/
+/.gitignore
 /controlador/
 /lexico/
-/modelo/
+/sintaxis/
+/vista/
