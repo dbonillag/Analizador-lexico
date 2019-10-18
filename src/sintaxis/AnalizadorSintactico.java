@@ -70,7 +70,7 @@ public class AnalizadorSintactico {
 						obtenerSiguienteToken();
 
 						ArrayList<Parametro> parametros = esListaParametros();
-						System.out.println("este " + tokenActual);
+
 						if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
 							obtenerSiguienteToken();
 
@@ -249,39 +249,114 @@ public class AnalizadorSintactico {
 	}
 
 	/**
+	 * <Retorno>::= regret <Expresion>"!"
 	 * 
 	 * @return
 	 */
-	private Sentencia esRetorno() {
-		// TODO Auto-generated method stub
+	public Sentencia esRetorno() {
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("regret")) {
+			obtenerSiguienteToken();
+
+			Expresion expresion = esExpresion();
+
+			if (expresion != null) {
+				Token identificador = tokenActual;
+				obtenerSiguienteToken();
+				if (tokenActual.getCategoria() != Categoria.TERMINAL) {
+					return new Retorno(identificador);
+				} else {
+					reportarError("Falta el fin de linea");
+				}
+			} else {
+				reportarError("Falta la expresion a retornar");
+			}
+		}
 		return null;
 	}
 
 	/**
-	 * Tampoco estoy seguro de si hay que hacer este
+	 * 
+	 * <InvocacionDeFuncion>::= identificador "(" [<ListaArgumentos>] ")" "!"
 	 * 
 	 * @return
 	 */
-	private Sentencia esInvocacionDeFuncion() {
-		// TODO Auto-generated method stub
+	public Sentencia esInvocacionDeFuncion() {
+		if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+			Token identificador = tokenActual;
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
+				obtenerSiguienteToken();
+				ArrayList<Expresion> argumentos = esListaArgumentos();
+				if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
+					obtenerSiguienteToken();
+					if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+						return new InvocacionDeFuncion(identificador, argumentos);
+					} else {
+						reportarError("Falta el fin de linea");
+					}
+				} else {
+					reportarError("Falta paréntesis derecho");
+				}
+			} else {
+				reportarError("Falta paréntesis izquierdo");
+			}
+		}
+
 		return null;
+
 	}
 
 	/**
+	 * 
+	 * <Lectura> read "!"
 	 * 
 	 * @return Lectura
 	 */
-	private Sentencia esLectura() {
-		// TODO Auto-generated method stub
+	public Sentencia esLectura() {
+
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("read")) {
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+				return new Lectura();
+			} else {
+				reportarError("Falta el fin de linea");
+			}
+		}
 		return null;
 	}
 
 	/**
 	 * 
+	 * <Impresion> show "(" <ExpresionCadena> ")" "!"
+	 * 
 	 * @return Impresion
 	 */
-	private Sentencia esImpresion() {
-		// TODO Auto-generated method stub
+	public Sentencia esImpresion() {
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("show")) {
+			Token identificador = tokenActual;
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
+				obtenerSiguienteToken();
+				ExpresionCadena cadena = esExpresionCadena();
+				if (cadena!=null) {
+//TODO terminar
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
+						obtenerSiguienteToken();
+						if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+							return new InvocacionDeFuncion(identificador, argumentos);
+						} else {
+							reportarError("Falta el fin de linea");
+						}
+					} else {
+						reportarError("Falta paréntesis derecho");
+					}
+				} else {
+					reportarError("Falta paréntesis izquierdo");
+				}
+
+			}
+		}
+
 		return null;
 	}
 
@@ -289,7 +364,7 @@ public class AnalizadorSintactico {
 	 * 
 	 * @return Ciclo
 	 */
-	private Ciclo esCiclo() {
+	public Ciclo esCiclo() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -298,7 +373,7 @@ public class AnalizadorSintactico {
 	 * 
 	 * @return Condicion
 	 */
-	private Condicion esCondicion() {
+	public Condicion esCondicion() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -380,6 +455,19 @@ public class AnalizadorSintactico {
 		return null;
 	}
 
+	public ArrayList<Expresion> esListaArgumentos() {
+		ArrayList<Expresion> lista = new ArrayList<>();
+
+		Expresion expresion = esExpresion();
+
+		while (expresion != null) {
+			lista.add(expresion);
+			expresion = esExpresion();
+		}
+
+		return lista;
+	}
+
 	/**
 	 * <Expresion> ::= <ExpresionAritmetica> | <ExpresionLogica> |
 	 * <ExpresionRelacional> | <ExpresionCadena>
@@ -413,17 +501,27 @@ public class AnalizadorSintactico {
 
 	}
 
-	private Expresion esExpresionCadena() {
+	/**
+	 * @return
+	 */
+	public Expresion esExpresionCadena() {
+		return null;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Expresion esExpresionRelacional() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private Expresion esExpresionRelacional() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Expresion esExpresionLogica() {
+	/**
+	 * 
+	 * @return
+	 */
+	public Expresion esExpresionLogica() {
 		// TODO Auto-generated method stub
 		return null;
 	}
