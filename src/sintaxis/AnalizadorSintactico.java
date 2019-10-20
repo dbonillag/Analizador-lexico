@@ -338,7 +338,7 @@ public class AnalizadorSintactico {
 			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
 				obtenerSiguienteToken();
 				ExpresionCadena cadena = esExpresionCadena();
-				if (cadena!=null) {
+				if (cadena != null) {
 //TODO terminar
 					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
 						obtenerSiguienteToken();
@@ -502,27 +502,89 @@ public class AnalizadorSintactico {
 	}
 
 	/**
+	 * <ExpresionCadena> ::= CadenaDeCaracteres[","<Expresión>]
+	 * 
 	 * @return
 	 */
 	public Expresion esExpresionCadena() {
+
+		if (tokenActual.getCategoria() == Categoria.CADENA) {
+			Token cadenaDeCaracteres = tokenActual;
+			obtenerSiguienteToken();
+
+			Expresion expresion = null;
+			if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
+				obtenerSiguienteToken();
+				expresion = esExpresion();
+				if (expresion == null) {
+					reportarError("Falta la expresion");
+				}
+			}
+			return new ExpresionCadena(cadenaDeCaracteres, expresion);
+
+		}
 		return null;
 	}
 
 	/**
-	 * 
+	 *<ExpresionRelacional>::= <ExpresionAritmetica>operadorRelacional<ExpresionAritmetica>
 	 * @return
 	 */
 	public Expresion esExpresionRelacional() {
-		// TODO Auto-generated method stub
+		ExpresionAritmetica expresionAritIzq=esExpresionAritmetica();
+		if(expresionAritIzq!=null) {
+			
+			obtenerSiguienteToken();
+			
+			
+			
+			if (tokenActual.getCategoria()==Categoria.RELACIONAL) {
+				Token opRelacional = tokenActual;
+				obtenerSiguienteToken();
+				ExpresionAritmetica expresionAritDer=esExpresionAritmetica();
+				if (expresionAritDer!=null) {
+					return new ExpresionRelacional(expresionAritIzq, opRelacional, expresionAritDer);
+				}else {
+					reportarError("Falta la expresión relacional izquierda");
+				}
+				
+				
+			}else {
+				reportarError("Duda:Que pasa si enrealidad es una expresion aritmetica sola?");
+			}
+			
+			
+		}
 		return null;
 	}
 
 	/**
-	 * 
+	 * <ExpresionLogica> ::= <ExpresionRelacional>|<ExpresionRelacional>OperadorLogico<ExpresionRelacional>|OperadorLogico<ExpresionRelacional>                                                   
 	 * @return
 	 */
 	public Expresion esExpresionLogica() {
-		// TODO Auto-generated method stub
+		ExpresionRelacional expRelIzq=(ExpresionRelacional) esExpresionRelacional();
+		if (expRelIzq!=null) {
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria()==Categoria.LOGICO) {
+				Token opLogico=tokenActual;
+				
+				obtenerSiguienteToken();
+				
+				ExpresionRelacional ExpRelDer=(ExpresionRelacional) esExpresionRelacional();
+				
+				if (ExpRelDer!=null) {
+					
+					
+					return new ExpresionLogica(expRelIzq, ExpRelDer, opLogico);
+				}
+				
+						
+			}
+			
+			
+			return new ExpresionLogica(expRelIzq);
+		}
 		return null;
 	}
 
