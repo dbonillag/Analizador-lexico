@@ -1,11 +1,11 @@
 package sintaxis;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import javafx.scene.control.TreeItem;
 
 public class Arreglo extends Sentencia {
 
 	@Override
-	public DefaultMutableTreeNode getArbolVisual() {
-		return new DefaultMutableTreeNode("Asignación");
+	public TreeItem<String> getArbolVisual() {
+		return new TreeItem<String>("Arreglo");
 	}
 }

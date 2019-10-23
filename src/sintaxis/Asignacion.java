@@ -1,30 +1,30 @@
 package sintaxis;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import javafx.scene.control.TreeItem;
 import lexico.Token;
 
 public class Asignacion extends Sentencia {
 
-	private Token indentificador;
+	private Token identificador;
 	private Token operadorAsignacion;
 	private Expresion expresion;
 
 	public Asignacion(Token indentificador, Token operadorAsignacion, Expresion expresion) {
 		super();
-		this.indentificador = indentificador;
+		this.identificador = indentificador;
 		this.operadorAsignacion = operadorAsignacion;
 		this.expresion = expresion;
 	}
 
 	@Override
-	public String toString() {
-		return "Asignacion [indentificador=" + indentificador + ", operadorAsignacion=" + operadorAsignacion
-				+ ", expresion=" + expresion + "]";
-	}
+	public TreeItem<String> getArbolVisual() {
+		TreeItem<String> raiz = new TreeItem<String>("Asignación");
+		raiz.getChildren().add(new TreeItem<String>("Identificador: " + identificador.getPalabra()));
+		raiz.getChildren().add(new TreeItem<String>("Operador: " + operadorAsignacion.getPalabra()));
+		raiz.getChildren().add(expresion.getArbolVisual());
 
-	@Override
-	public DefaultMutableTreeNode getArbolVisual() {
-		return new DefaultMutableTreeNode("Asignación");
+		return raiz;
+
 	}
 
 }

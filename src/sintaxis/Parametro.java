@@ -1,6 +1,5 @@
 package sintaxis;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import javafx.scene.control.TreeItem;
 import lexico.Token;
@@ -33,6 +32,11 @@ public class Parametro {
 	}
 
 	public TreeItem<String> getArbolVisual() {
-		return new TreeItem(nombre.getPalabra() + " : " + tipoDato.getPalabra());
+		TreeItem<String> raiz = new TreeItem<>("Parametro");
+		raiz.getChildren().add(new TreeItem<>("Identificador: " + nombre.getPalabra()));
+		raiz.getChildren().add(new TreeItem<>("Tipo de dato: " + tipoDato.getPalabra()));
+
+		return raiz;
+
 	}
 }

@@ -1,13 +1,15 @@
 package sintaxis;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+
+import javafx.scene.control.TreeItem;
 
 public class Lectura extends Sentencia {
 
 	@Override
-	public DefaultMutableTreeNode getArbolVisual() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public TreeItem<String> getArbolVisual() {
+		TreeItem<String> raiz = new TreeItem<>("Lectura");
 
+		return raiz;
+
+	}
 }

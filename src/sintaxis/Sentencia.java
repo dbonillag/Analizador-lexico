@@ -1,8 +1,8 @@
 package sintaxis;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import javafx.scene.control.TreeItem;
 
 public abstract class Sentencia {
 
-	public abstract DefaultMutableTreeNode getArbolVisual();
+	public abstract TreeItem<String> getArbolVisual();
 }

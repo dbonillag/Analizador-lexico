@@ -49,7 +49,7 @@ public class AnalizadorSintactico {
 
 	/**
 	 * <Funcion> ::= method identificador <TipoRetorno> "("[<ListaParametros>]")"
-	 * ":" <BloqueSentencias>
+	 * ":" <BloqueSentencias> ":"
 	 * 
 	 * @return Funcion
 	 */
@@ -76,16 +76,20 @@ public class AnalizadorSintactico {
 
 							if (tokenActual.getCategoria() == Categoria.DOS_PUNTOS) {
 								obtenerSiguienteToken();
-							}
 
-							ArrayList<Sentencia> bloqueSentencias = esBloqueDeSentencias();
+								ArrayList<Sentencia> bloqueSentencias = esBloqueSentencias();
 
-							if (bloqueSentencias != null) {
-								return new Funcion(nombre, parametros, tipoRetorno, bloqueSentencias);
+								if (tokenActual.getCategoria() == Categoria.DOS_PUNTOS) {
+									obtenerSiguienteToken();
+
+									return new Funcion(nombre, parametros, tipoRetorno, bloqueSentencias);
+
+								} else {
+									reportarError("Falta dos puntos de cierre");
+								}
 							} else {
-								reportarError("Faltó el bloque de sentencias en la función");
+								reportarError("Falta dos puntos de apertura");
 							}
-
 						} else {
 							reportarError("Falta paréntesis derecho");
 						}
@@ -152,30 +156,21 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * <BloqueSentencias> ::= "{" [<ListaSentencias>] "}"
+	 * <ListaSentencias> ::= <Sentencia>[<ListaSentencias>]
 	 * 
-	 * @return ArrayList<Sentencia>
+	 * @return
 	 */
-	public ArrayList<Sentencia> esBloqueDeSentencias() {
-		System.out.println("entra a esBloqueSentencias()");
-		if (tokenActual.getCategoria() == Categoria.LLAVE_APERTURA) {
-			obtenerSiguienteToken();
-			ArrayList<Sentencia> listaSentencias = new ArrayList<>();
+	public ArrayList<Sentencia> esBloqueSentencias() {
+		ArrayList<Sentencia> lista = new ArrayList<>();
 
-			Sentencia sentencia = esSentencia();
+		Sentencia sentencia = esSentencia();
 
-			while (sentencia != null) {
-				listaSentencias.add(sentencia);
-				sentencia = esSentencia();
-			}
-			if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
-				obtenerSiguienteToken();
-				return listaSentencias;
-			} else {
-				reportarError("Falta llave derecha");
-			}
+		while (sentencia != null) {
+			lista.add(sentencia);
+			sentencia = esSentencia();
 		}
-		return null;
+
+		return lista;
 	}
 
 	/**
@@ -280,7 +275,11 @@ public class AnalizadorSintactico {
 	 * 
 	 * @return
 	 */
+
+	// TODO Este no funciona
+
 	public Sentencia esInvocacionDeFuncion() {
+		System.out.println(tokenActual.getPalabra());
 		if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
 			Token identificador = tokenActual;
 			obtenerSiguienteToken();
@@ -307,7 +306,6 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * 
 	 * <Lectura> read "!"
 	 * 
 	 * @return Lectura
@@ -317,6 +315,7 @@ public class AnalizadorSintactico {
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("read")) {
 			obtenerSiguienteToken();
 			if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+				obtenerSiguienteToken();
 				return new Lectura();
 			} else {
 				reportarError("Falta el fin de linea");
@@ -333,17 +332,16 @@ public class AnalizadorSintactico {
 	 */
 	public Sentencia esImpresion() {
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("show")) {
-			Token identificador = tokenActual;
 			obtenerSiguienteToken();
 			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
 				obtenerSiguienteToken();
 				ExpresionCadena cadena = esExpresionCadena();
 				if (cadena != null) {
-//TODO terminar
 					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
 						obtenerSiguienteToken();
 						if (tokenActual.getCategoria() == Categoria.TERMINAL) {
-							return new InvocacionDeFuncion(identificador, argumentos);
+							obtenerSiguienteToken();
+							return new Impresion(cadena);
 						} else {
 							reportarError("Falta el fin de linea");
 						}
@@ -351,30 +349,125 @@ public class AnalizadorSintactico {
 						reportarError("Falta paréntesis derecho");
 					}
 				} else {
-					reportarError("Falta paréntesis izquierdo");
+					reportarError("Falta expresion cadena");
 				}
-
+			} else {
+				reportarError("Falta paréntesis izquierdo");
 			}
+
 		}
 
 		return null;
+
 	}
 
 	/**
+	 * 
+	 * * <Ciclo> ::= cicle "("<ExpresionLogica>")" "{" <BloqueSentencias> "}"
 	 * 
 	 * @return Ciclo
 	 */
 	public Ciclo esCiclo() {
-		// TODO Auto-generated method stub
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("cicle")) {
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
+				obtenerSiguienteToken();
+				ExpresionLogica expLog = esExpresionLogica();
+				if (expLog != null) {
+
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
+						obtenerSiguienteToken();
+
+						if (tokenActual.getCategoria() == Categoria.LLAVE_APERTURA) {
+							obtenerSiguienteToken();
+
+							ArrayList<Sentencia> bloqueSentencias = esBloqueSentencias();
+
+							if (bloqueSentencias != null) {
+
+								if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
+									obtenerSiguienteToken();
+									return new Ciclo(expLog, bloqueSentencias);
+								} else {
+
+									reportarError("Falta cerrar llaves");
+								}
+
+							} else {
+								reportarError("Faltó el bloque de sentencias en la función");
+							}
+
+						} else {
+
+							reportarError("Falta abrir llaves");
+						}
+
+					} else {
+						reportarError("Falta paréntesis derecho");
+					}
+				} else {
+					reportarError("Falta la condicion");
+				}
+			} else {
+				reportarError("Falta paréntesis izquierdo");
+			}
+
+		}
 		return null;
 	}
 
 	/**
 	 * 
+	 * * <Condicion> ::= con "("<ExpresionLogica>")" "{" <BloqueSentencias> "}"
+	 * 
 	 * @return Condicion
 	 */
 	public Condicion esCondicion() {
-		// TODO Auto-generated method stub
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("con")) {
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
+				obtenerSiguienteToken();
+				ExpresionLogica expLog = esExpresionLogica();
+				if (expLog != null) {
+					System.out.println(tokenActual.getPalabra());
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
+						obtenerSiguienteToken();
+
+						if (tokenActual.getCategoria() == Categoria.LLAVE_APERTURA) {
+							obtenerSiguienteToken();
+
+							ArrayList<Sentencia> bloqueSentencias = esBloqueSentencias();
+
+							if (bloqueSentencias != null) {
+
+								if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
+									obtenerSiguienteToken();
+									return new Condicion(expLog, bloqueSentencias);
+								} else {
+
+									reportarError("Falta cerrar llaves");
+								}
+
+							} else {
+								reportarError("Faltó el bloque de sentencias en la función");
+							}
+
+						} else {
+
+							reportarError("Falta abrir llaves");
+						}
+
+					} else {
+						reportarError("Falta paréntesis derecho");
+					}
+				} else {
+					reportarError("Falta la condicion");
+				}
+			} else {
+				reportarError("Falta paréntesis izquierdo");
+			}
+
+		}
 		return null;
 	}
 
@@ -384,7 +477,7 @@ public class AnalizadorSintactico {
 	 * @return Arreglo
 	 */
 	public Arreglo esArreglo() {
-		// TODO auto-generated method stub
+		// TODO auto generated method stub
 		return null;
 	}
 
@@ -506,7 +599,7 @@ public class AnalizadorSintactico {
 	 * 
 	 * @return
 	 */
-	public Expresion esExpresionCadena() {
+	public ExpresionCadena esExpresionCadena() {
 
 		if (tokenActual.getCategoria() == Categoria.CADENA) {
 			Token cadenaDeCaracteres = tokenActual;
@@ -527,62 +620,55 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 *<ExpresionRelacional>::= <ExpresionAritmetica>operadorRelacional<ExpresionAritmetica>
+	 * <ExpresionRelacional>::=
+	 * <ExpresionAritmetica>operadorRelacional<ExpresionAritmetica>
+	 * 
 	 * @return
 	 */
-	public Expresion esExpresionRelacional() {
-		ExpresionAritmetica expresionAritIzq=esExpresionAritmetica();
-		if(expresionAritIzq!=null) {
-			
-			obtenerSiguienteToken();
-			
-			
-			
-			if (tokenActual.getCategoria()==Categoria.RELACIONAL) {
+	public ExpresionRelacional esExpresionRelacional() {
+		ExpresionAritmetica expresionAritIzq = esExpresionAritmetica();
+		if (expresionAritIzq != null) {
+			if (tokenActual.getCategoria() == Categoria.RELACIONAL) {
 				Token opRelacional = tokenActual;
 				obtenerSiguienteToken();
-				ExpresionAritmetica expresionAritDer=esExpresionAritmetica();
-				if (expresionAritDer!=null) {
+				ExpresionAritmetica expresionAritDer = esExpresionAritmetica();
+				if (expresionAritDer != null) {
 					return new ExpresionRelacional(expresionAritIzq, opRelacional, expresionAritDer);
-				}else {
+				} else {
 					reportarError("Falta la expresión relacional izquierda");
 				}
-				
-				
-			}else {
+			} else {
 				reportarError("Duda:Que pasa si enrealidad es una expresion aritmetica sola?");
 			}
-			
-			
+
 		}
 		return null;
 	}
 
 	/**
-	 * <ExpresionLogica> ::= <ExpresionRelacional>|<ExpresionRelacional>OperadorLogico<ExpresionRelacional>|OperadorLogico<ExpresionRelacional>                                                   
+	 * <ExpresionLogica> ::=
+	 * <ExpresionRelacional>|<ExpresionRelacional>OperadorLogico<ExpresionRelacional>|operadorLogico<ExpresionRelacional>
+	 * 
 	 * @return
 	 */
-	public Expresion esExpresionLogica() {
-		ExpresionRelacional expRelIzq=(ExpresionRelacional) esExpresionRelacional();
-		if (expRelIzq!=null) {
-			obtenerSiguienteToken();
-			if (tokenActual.getCategoria()==Categoria.LOGICO) {
-				Token opLogico=tokenActual;
-				
+	public ExpresionLogica esExpresionLogica() {
+		ExpresionRelacional expRelIzq = (ExpresionRelacional) esExpresionRelacional();
+		if (expRelIzq != null) {
+			// obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.LOGICO) {
+				Token opLogico = tokenActual;
+
 				obtenerSiguienteToken();
-				
-				ExpresionRelacional ExpRelDer=(ExpresionRelacional) esExpresionRelacional();
-				
-				if (ExpRelDer!=null) {
-					
-					
+
+				ExpresionRelacional ExpRelDer = (ExpresionRelacional) esExpresionRelacional();
+
+				if (ExpRelDer != null) {
+
 					return new ExpresionLogica(expRelIzq, ExpRelDer, opLogico);
 				}
-				
-						
+
 			}
-			
-			
+
 			return new ExpresionLogica(expRelIzq);
 		}
 		return null;
@@ -639,7 +725,7 @@ public class AnalizadorSintactico {
 						if (ea2 != null) {
 							return new ExpresionAritmetica(ea, operadorAritmetico, ea2);
 						} else {
-							reportarError("Falta una expresión aritmética");
+							reportarError("Falta expresión aritmética");
 						}
 
 					} else {
@@ -647,11 +733,11 @@ public class AnalizadorSintactico {
 					}
 
 				} else {
-					reportarError("Falta el paréntesis de cierre");
+					reportarError("Falta paréntesis derecho");
 				}
 
 			} else {
-				reportarError("Falta una expresión aritmética");
+				reportarError("Falta expresión aritmética");
 			}
 
 		}
@@ -676,9 +762,7 @@ public class AnalizadorSintactico {
 				obtenerSiguienteToken();
 
 				Expresion exp = esExpresion();
-
 				if (exp != null) {
-
 					if (tokenActual.getCategoria() == Categoria.TERMINAL) {
 						obtenerSiguienteToken();
 						return new Asignacion(identificador, operador, exp);
@@ -736,9 +820,40 @@ public class AnalizadorSintactico {
 	}
 
 	public void reportarError(String mensaje) {
-		System.out.println(mensaje);
-		System.out.println(tokenActual.getFila() + " " + tokenActual.getColumna());
+		System.out.println(mensaje + " en " + tokenActual.getFila() + " " + tokenActual.getColumna());
 		listaErrores.add(new ErrorSintactico(mensaje, tokenActual.getFila(), tokenActual.getColumna()));
+	}
+
+	public ArrayList<Token> getListaTokens() {
+		return listaTokens;
+	}
+
+	public void setListaTokens(ArrayList<Token> listaTokens) {
+		this.listaTokens = listaTokens;
+	}
+
+	public int getPosActual() {
+		return posActual;
+	}
+
+	public void setPosActual(int posActual) {
+		this.posActual = posActual;
+	}
+
+	public Token getTokenActual() {
+		return tokenActual;
+	}
+
+	public void setTokenActual(Token tokenActual) {
+		this.tokenActual = tokenActual;
+	}
+
+	public ArrayList<ErrorSintactico> getListaErrores() {
+		return listaErrores;
+	}
+
+	public void setListaErrores(ArrayList<ErrorSintactico> listaErrores) {
+		this.listaErrores = listaErrores;
 	}
 
 }

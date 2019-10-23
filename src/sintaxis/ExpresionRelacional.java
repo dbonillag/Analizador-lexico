@@ -1,5 +1,6 @@
 package sintaxis;
 
+import javafx.scene.control.TreeItem;
 import lexico.Token;
 
 public class ExpresionRelacional extends Expresion {
@@ -31,6 +32,21 @@ public class ExpresionRelacional extends Expresion {
 	}
 	public void setExpresionDerecha(ExpresionAritmetica expresionDerecha) {
 		this.expresionDerecha = expresionDerecha;
+	}
+	@Override
+	public TreeItem<String> getArbolVisual() {
+		TreeItem<String> raiz = new TreeItem<>("Expresion Logica");
+
+		if (expresionIzquierda != null)
+			raiz.getChildren().add(expresionIzquierda.getArbolVisual());
+		if (operadorAritmetico != null) {
+			raiz.getChildren().add(new TreeItem<>("Operador: " + operadorAritmetico.getPalabra()));
+		}
+		if (expresionDerecha != null) {
+			raiz.getChildren().add(expresionDerecha.getArbolVisual());
+		}
+
+		return raiz;
 	}
 	
 	

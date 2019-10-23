@@ -1,5 +1,6 @@
 package sintaxis;
 
+import javafx.scene.control.TreeItem;
 import lexico.Token;
 
 public class ExpresionAritmetica extends Expresion {
@@ -61,22 +62,20 @@ public class ExpresionAritmetica extends Expresion {
 	}
 
 	@Override
-	public String toString() {
-
-		if (termino != null && expresionAritmetica1 == null && expresionAritmetica2 == null
-				&& operadorAritmetico == null) {
-			return termino.toString();
-		} else if (termino != null && expresionAritmetica1 != null && expresionAritmetica2 == null
-				&& operadorAritmetico != null) {
-			return termino.toString() + " " + operadorAritmetico.toString() + " " + expresionAritmetica1.toString();
-		} else if (termino == null && expresionAritmetica1 != null && expresionAritmetica2 == null
-				&& operadorAritmetico == null) {
-			return expresionAritmetica1.toString();
-		} else {
-			return expresionAritmetica1.toString() + " " + operadorAritmetico.toString() + " "
-					+ expresionAritmetica2.toString();
+	public TreeItem<String> getArbolVisual() {
+		TreeItem<String> raiz = new TreeItem<>("Expresion Aritmetica");
+		if (termino != null)
+			raiz.getChildren().add(new TreeItem<>("Termino: " + termino.getPalabra()));
+		if (operadorAritmetico != null)
+			raiz.getChildren().add(new TreeItem<>("Operador: " + operadorAritmetico.getPalabra()));
+		if (expresionAritmetica1 != null) {
+			raiz.getChildren().add(expresionAritmetica1.getArbolVisual());
+		}
+		if (expresionAritmetica2 != null) {
+			raiz.getChildren().add(expresionAritmetica2.getArbolVisual());
 		}
 
+		return raiz;
 	}
 
 }

@@ -1,16 +1,13 @@
 package sintaxis;
 
-import java.util.ArrayList;
-
+import javafx.scene.control.TreeItem;
 import lexico.Token;
 
 public class ExpresionCadena extends Expresion {
-	
+
 	Token cadenaDeCaracteres;
-	
-	 Expresion expresion;
-	 
-	 
+
+	Expresion expresion;
 
 	public ExpresionCadena(Token cadenaDeCaracteres, Expresion expresion) {
 		super();
@@ -33,11 +30,17 @@ public class ExpresionCadena extends Expresion {
 	public void setExpresion(Expresion expresion) {
 		this.expresion = expresion;
 	}
-	
-	
 
-	
-	
-	
+	@Override
+	public TreeItem<String> getArbolVisual() {
+		TreeItem<String> raiz = new TreeItem<String>("Expresion Cadena");
+		raiz.getChildren().add(new TreeItem<>("Cadena: " + cadenaDeCaracteres.getPalabra()));
+		if (expresion != null) {
+			raiz.getChildren().add(expresion.getArbolVisual());
+		}
+
+		return raiz;
+
+	}
 
 }

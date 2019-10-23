@@ -1,7 +1,6 @@
 package sintaxis;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-
+import javafx.scene.control.TreeItem;
 import lexico.Token;
 
 public class Retorno extends Sentencia {
@@ -17,9 +16,21 @@ public class Retorno extends Sentencia {
 
 
 	@Override
-	public DefaultMutableTreeNode getArbolVisual() {
+	public TreeItem<String> getArbolVisual() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+	public Token getTipoDato() {
+		return tipoDato;
+	}
+
+
+
+	public void setTipoDato(Token tipoDato) {
+		this.tipoDato = tipoDato;
 	}
 
 }

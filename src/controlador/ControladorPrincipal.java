@@ -4,9 +4,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,13 +13,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import lexico.AnalizadorLexico;
 import lexico.ErrorLexico;
 import lexico.Token;
 import lexico.TokenObservable;
 import sintaxis.AnalizadorSintactico;
+import sintaxis.ErrorSintactico;
 import sintaxis.UnidadDeCompilacion;
 
 public class ControladorPrincipal {
@@ -90,6 +87,8 @@ public class ControladorPrincipal {
 	@FXML
 	void ingresar(ActionEvent event) {
 
+		campoErrores.setText("");
+		
 		// Analisis Lexico
 		AnalizadorLexico analizadorLexico = new AnalizadorLexico(campoTexto.getText());
 		analizadorLexico.analizar();
@@ -102,8 +101,11 @@ public class ControladorPrincipal {
 		AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getListaTokens());
 		UnidadDeCompilacion uc = analizadorSintactico.esUnidadDeCompilacion();
 		arbolVisual.setRoot(uc.getArbolVisual());
+		for (ErrorSintactico error : analizadorSintactico.getListaErrores()) {
+			campoErrores.appendText(error.toString() + "\n");
+		}
 
-		campoErrores.setText("");
+
 
 	}
 

@@ -2,7 +2,6 @@ package sintaxis;
 
 import java.util.ArrayList;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import javafx.scene.control.TreeItem;
 import lexico.Token;
@@ -60,12 +59,22 @@ public class Funcion {
 		raiz.getChildren().add(new TreeItem<>("Nombre: " + nombre.getPalabra()));
 		raiz.getChildren().add(new TreeItem<>("Tipo de retorno: " + tipoRetorno.getPalabra()));
 
-		TreeItem<String> params = new TreeItem();
+		// Parametros
+		TreeItem<String> params = new TreeItem<String>("Lista Parametros");
 		raiz.getChildren().add(params);
 
 		for (Parametro parametro : parametros) {
 			params.getChildren().add(parametro.getArbolVisual());
 		}
+
+		// Sentencias
+		TreeItem<String> sentencias = new TreeItem<String>("Lista Sentencias");
+		raiz.getChildren().add(sentencias);
+
+		for (Sentencia sentencia : bloqueSentencias) {
+			sentencias.getChildren().add(sentencia.getArbolVisual());
+		}
+
 		return raiz;
 	}
 
