@@ -206,7 +206,8 @@ public class AnalizadorLexico {
 	/**
 	 * Z : NATURAL R : REAL regret : RETURN cicle : WHILE con : IF start : main bin
 	 * : Boolean void : void text : String char : char list : arreglo show :
-	 * imprimir read : leer pika : no hace nada method : funcion
+	 * imprimir read : leer pika : no hace nada method : funcion call :
+	 * llamadaDeFuncion
 	 */
 
 	// <TipoRetorno> ::=Z | R | bin | void | text | char
@@ -214,8 +215,8 @@ public class AnalizadorLexico {
 
 		if (Character.isLetter(caracterActual)) {
 			String palabra = "";
-			String[] reservadas = { "method", "Z", "R", "regret", "cicle", "con", "start", "bin", "void", "text",
-					"char", "list", "show", "read", "pika" };
+			String[] reservadas = { "call", "method", "Z", "R", "regret", "cicle", "con", "start", "bin", "void",
+					"text", "char", "list", "show", "read", "pika" };
 			int fila = filaActual;
 			int columna = columnaActual;
 

@@ -15,12 +15,6 @@ public class InvocacionDeFuncion extends Sentencia {
 		this.argumentos = argumentos;
 	}
 
-	@Override
-	public TreeItem<String> getArbolVisual() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public Token getIdentificador() {
 		return identificador;
 	}
@@ -35,6 +29,21 @@ public class InvocacionDeFuncion extends Sentencia {
 
 	public void setArgumentos(ArrayList<Expresion> argumentos) {
 		this.argumentos = argumentos;
+	}
+
+	public TreeItem<String> getArbolVisual() {
+		TreeItem<String> raiz = new TreeItem<>("Invocacion");
+		raiz.getChildren().add(new TreeItem<>("Identificador: " + identificador.getPalabra()));
+
+		TreeItem<String> sentencias = new TreeItem<String>("Lista Sentencias");
+		raiz.getChildren().add(sentencias);
+
+		for (Expresion arg : argumentos) {
+			sentencias.getChildren().add(arg.getArbolVisual());
+		}
+
+		return raiz;
+
 	}
 
 }

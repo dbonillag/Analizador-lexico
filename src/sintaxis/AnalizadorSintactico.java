@@ -123,7 +123,7 @@ public class AnalizadorSintactico {
 
 			lista.add(param);
 
-			if (tokenActual.getPalabra().equals(",")) {
+			if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
 				obtenerSiguienteToken();
 				lista.addAll(esListaParametros());
 			}
@@ -219,17 +219,22 @@ public class AnalizadorSintactico {
 			return expr;
 		}
 
+		expr = esDeclaracionDeVariable();
+		if (expr != null) {
+			return expr;
+		}
+
 		expr = esAsignacion();
 		if (expr != null) {
 			return expr;
 		}
 
-		expr = esRetorno();
+		expr = esInvocacionDeFuncion();
 		if (expr != null) {
 			return expr;
 		}
 
-		expr = esInvocacionDeFuncion();
+		expr = esRetorno();
 		if (expr != null) {
 			return expr;
 		}
@@ -271,33 +276,36 @@ public class AnalizadorSintactico {
 
 	/**
 	 * 
-	 * <InvocacionDeFuncion>::= identificador "(" [<ListaArgumentos>] ")" "!"
+	 * <InvocacionDeFuncion>::= call identificador "(" [<ListaArgumentos>] ")" "!"
 	 * 
 	 * @return
 	 */
 
-	// TODO Este no funciona
-
 	public Sentencia esInvocacionDeFuncion() {
-		System.out.println(tokenActual.getPalabra());
-		if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
-			Token identificador = tokenActual;
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("call")) {
 			obtenerSiguienteToken();
-			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+				Token identificador = tokenActual;
 				obtenerSiguienteToken();
-				ArrayList<Expresion> argumentos = esListaArgumentos();
-				if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
+				if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
 					obtenerSiguienteToken();
-					if (tokenActual.getCategoria() == Categoria.TERMINAL) {
-						return new InvocacionDeFuncion(identificador, argumentos);
+					ArrayList<Expresion> argumentos = esListaArgumentos();
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
+						obtenerSiguienteToken();
+						if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+							obtenerSiguienteToken();
+							return new InvocacionDeFuncion(identificador, argumentos);
+						} else {
+							reportarError("Falta el fin de linea");
+						}
 					} else {
-						reportarError("Falta el fin de linea");
+						reportarError("Falta paréntesis derecho");
 					}
 				} else {
-					reportarError("Falta paréntesis derecho");
+					reportarError("Falta paréntesis izquierdo");
 				}
 			} else {
-				reportarError("Falta paréntesis izquierdo");
+				reportarError("Falta el identificador de la funcion a llamar");
 			}
 		}
 
@@ -306,20 +314,38 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * <Lectura> read "!"
+	 * <Lectura> read "(" <identificador> ")""!"
 	 * 
 	 * @return Lectura
 	 */
 	public Sentencia esLectura() {
-
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("read")) {
 			obtenerSiguienteToken();
-			if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
 				obtenerSiguienteToken();
-				return new Lectura();
+				if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+					Token identificador = tokenActual;
+					obtenerSiguienteToken();
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
+						obtenerSiguienteToken();
+						if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+							obtenerSiguienteToken();
+							return new Lectura(identificador);
+						} else {
+							reportarError("Falta el fin de linea");
+						}
+					} else {
+						reportarError("Falta paréntesis derecho");
+					}
+				} else {
+					reportarError("Falta el identificador");
+				}
+
 			} else {
-				reportarError("Falta el fin de linea");
+				reportarError("Falta paréntesis izquierdo");
+
 			}
+
 		}
 		return null;
 	}
@@ -429,7 +455,7 @@ public class AnalizadorSintactico {
 				obtenerSiguienteToken();
 				ExpresionLogica expLog = esExpresionLogica();
 				if (expLog != null) {
-					System.out.println(tokenActual.getPalabra());
+
 					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
 						obtenerSiguienteToken();
 
@@ -482,6 +508,33 @@ public class AnalizadorSintactico {
 	}
 
 	/**
+	 * <DeclaracionCampo> ::= <tipoDato> identificador "!"
+	 * 
+	 * @return
+	 */
+	public DeclaracionDeVariable esDeclaracionDeVariable() {
+
+		Token tipoDato = esTipoDato();
+		if (tipoDato != null) {
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+				Token identificador = tokenActual;
+				obtenerSiguienteToken();
+				if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+					obtenerSiguienteToken();
+					return new DeclaracionDeVariable(tipoDato, identificador);
+				} else {
+					reportarError("Falta fin de sentencia");
+				}
+			} else {
+				reportarError("Debe escribir al menos un identificador");
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * <Termino> ::= Z | R | identificador
 	 * 
 	 * @return Token
@@ -497,67 +550,22 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * <ListaVariables> :== <Variable> [","<ListaVariables>]
+	 * <ListaArgumentos> :== <Expresion> [","<ListaArgumentos>]
 	 * 
-	 * @return ArrayList<Variable>
+	 * @return
 	 */
-	public ArrayList<Variable> esListaVariables() {
-
-		ArrayList<Variable> lista = new ArrayList<>();
-		Variable variable = esVariable();
-
-		if (variable != null) {
-
-			lista.add(variable);
-
-			if (tokenActual.getPalabra().equals(",")) {
-				obtenerSiguienteToken();
-				lista.addAll(esListaVariables());
-			}
-		}
-		return lista;
-	}
-
-	/**
-	 * <Variable> ::= identificador["="<Expresion>]
-	 * 
-	 * @return Variable
-	 */
-	public Variable esVariable() {
-
-		if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
-			Token identificador = tokenActual;
-			obtenerSiguienteToken();
-
-			if (tokenActual.getPalabra().equals("=")) {
-				obtenerSiguienteToken();
-
-				Expresion e = esExpresion();
-
-				if (e != null) {
-					return new Variable(identificador, e);
-				} else {
-					reportarError("Falta la expresion");
-				}
-
-			} else {
-				return new Variable(identificador);
-			}
-		}
-
-		return null;
-	}
-
 	public ArrayList<Expresion> esListaArgumentos() {
+
 		ArrayList<Expresion> lista = new ArrayList<>();
+		Expresion arg = esExpresion();
 
-		Expresion expresion = esExpresion();
-
-		while (expresion != null) {
-			lista.add(expresion);
-			expresion = esExpresion();
+		if (arg != null) {
+			lista.add(arg);
+			if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
+				obtenerSiguienteToken();
+				lista.addAll(esListaArgumentos());
+			}
 		}
-
 		return lista;
 	}
 

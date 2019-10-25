@@ -71,6 +71,26 @@ public class ControladorPrincipal {
 		columnaCategoria.setCellValueFactory(
 				claseCelda -> new SimpleStringProperty(claseCelda.getValue().getCategoria().toString()));
 
+		campoTexto.setText("method @metodo bin (@a bin,@b text):\r\n" + 
+				"@a=5!\r\n" + 
+				"@a=4p(5p3)!\r\n" + 
+				"read(@a)!\r\n" + 
+				"show(\"cadena\")!\r\n" + 
+				"cicle(5>4){\r\n" + 
+				"@a=6!\r\n" + 
+				"}\r\n" + 
+				"con(5==4){\r\n" + 
+				"@a=8!\r\n" + 
+				"}\r\n" + 
+				"call @metodoAInvocar(@a,5p4)!\r\n" + 
+				":\r\n" + 
+				"¿Is this the real life?\r\n" + 
+				"¿¿\r\n" + 
+				"Or is\r\n" + 
+				"This just\r\n" + 
+				"FANTASY\r\n" + 
+				"??");
+		
 	}
 
 	void actualizarTabla(ArrayList<Token> tokens) {
@@ -87,8 +107,7 @@ public class ControladorPrincipal {
 	@FXML
 	void ingresar(ActionEvent event) {
 
-		campoErrores.setText("");
-		
+
 		// Analisis Lexico
 		AnalizadorLexico analizadorLexico = new AnalizadorLexico(campoTexto.getText());
 		analizadorLexico.analizar();
@@ -104,8 +123,6 @@ public class ControladorPrincipal {
 		for (ErrorSintactico error : analizadorSintactico.getListaErrores()) {
 			campoErrores.appendText(error.toString() + "\n");
 		}
-
-
 
 	}
 
