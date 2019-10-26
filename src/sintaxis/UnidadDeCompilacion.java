@@ -2,9 +2,8 @@ package sintaxis;
 
 import java.util.ArrayList;
 
-
-
 import javafx.scene.control.TreeItem;
+import semantica.TablaSimbolos;
 
 public class UnidadDeCompilacion {
 
@@ -28,8 +27,12 @@ public class UnidadDeCompilacion {
 		for (Funcion funcion : listaFunciones) {
 			raiz.getChildren().add(funcion.getArbolVisual());
 		}
-		
+
 		return raiz;
+	}
+
+	public void llenarTablaDeSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> listaErrores) {
+		// TODO aqui quedamos en clase
 	}
 
 }
