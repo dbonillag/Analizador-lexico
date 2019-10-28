@@ -174,24 +174,6 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * <ListaSentencias> ::= <Sentencia>[<ListaSentencias>]
-	 * 
-	 * @return
-	 */
-	public ArrayList<Sentencia> esListaSentencias() {
-		ArrayList<Sentencia> lista = new ArrayList<>();
-
-		Sentencia sentencia = esSentencia();
-
-		while (sentencia != null) {
-			lista.add(sentencia);
-			sentencia = esSentencia();
-		}
-
-		return lista;
-	}
-
-	/**
 	 * <Sentencia> ::= <Condicion> | <Ciclo> | <Impresion> | <Lectura> |
 	 * <Asignacion> | <DeclaracionVariable> | <Retorno> | <invocaFuncion> |
 	 * <arreglo>
@@ -503,7 +485,50 @@ public class AnalizadorSintactico {
 	 * @return Arreglo
 	 */
 	public Arreglo esArreglo() {
-		// TODO auto generated method stub
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("list")) {
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.CORCHETE_APERTURA) {
+				obtenerSiguienteToken();
+				Token tipoDato = esTipoDato();
+				if (tipoDato != null) {
+					obtenerSiguienteToken();
+					if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
+						obtenerSiguienteToken();
+						if (tokenActual.getCategoria() == Categoria.ENTERO) {
+							Token tamanio = tokenActual;
+							obtenerSiguienteToken();
+							if (tokenActual.getCategoria() == Categoria.CORCHETE_CIERRE) {
+								obtenerSiguienteToken();
+								if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+									Token identificador = tokenActual;
+									obtenerSiguienteToken();
+									if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+										obtenerSiguienteToken();
+										return new Arreglo(tipoDato, tamanio, identificador);
+									} else {
+										reportarError("Falta el fin de linea");
+									}
+								} else {
+									reportarError("Falta el identificador");
+								}
+							} else {
+								reportarError("Falta el corchete de cierre");
+							}
+						} else {
+							reportarError("Falta el tamaño del arreglo");
+						}
+					} else {
+						reportarError("Falta la coma");
+					}
+				} else {
+					reportarError("Falta el tipo de dato del arreglo");
+				}
+
+			} else {
+				reportarError("Falta abrir corchetes");
+			}
+		}
+
 		return null;
 	}
 

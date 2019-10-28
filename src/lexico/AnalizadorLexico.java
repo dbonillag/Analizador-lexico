@@ -537,7 +537,7 @@ public class AnalizadorLexico {
 	}
 
 	public boolean esCorcheteCierre() {
-		if (caracterActual == '}') {
+		if (caracterActual == ']') {
 			String palabra = "";
 			int fila = filaActual;
 			int columna = columnaActual;

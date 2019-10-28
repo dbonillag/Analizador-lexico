@@ -83,6 +83,8 @@ public class ControladorPrincipal {
 				"@a=8!\r\n" + 
 				"}\r\n" + 
 				"call @metodoAInvocar(@a,5p4)!\r\n" + 
+				"text @miCadena!\r\n"+
+				"list [text,5] @miArreglo!\r\n"+
 				":\r\n" + 
 				"¿Is this the real life?\r\n" + 
 				"¿¿\r\n" + 
@@ -90,7 +92,7 @@ public class ControladorPrincipal {
 				"This just\r\n" + 
 				"FANTASY\r\n" + 
 				"??");
-		
+
 	}
 
 	void actualizarTabla(ArrayList<Token> tokens) {
@@ -106,7 +108,7 @@ public class ControladorPrincipal {
 
 	@FXML
 	void ingresar(ActionEvent event) {
-
+		campoErrores.setText("");
 
 		// Analisis Lexico
 		AnalizadorLexico analizadorLexico = new AnalizadorLexico(campoTexto.getText());

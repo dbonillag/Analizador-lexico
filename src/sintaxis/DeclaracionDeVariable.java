@@ -15,7 +15,7 @@ public class DeclaracionDeVariable extends Sentencia {
 	}
 
 	public TreeItem<String> getArbolVisual() {
-		TreeItem<String> raiz = new TreeItem<>("Parametro");
+		TreeItem<String> raiz = new TreeItem<>("Declaracion");
 		raiz.getChildren().add(new TreeItem<>("Identificador: " + identificador.getPalabra()));
 		raiz.getChildren().add(new TreeItem<>("Tipo de dato: " + tipoDato.getPalabra()));
 
