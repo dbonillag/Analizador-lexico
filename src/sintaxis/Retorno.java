@@ -5,32 +5,19 @@ import lexico.Token;
 
 public class Retorno extends Sentencia {
 
-	private Token tipoDato;
-	
-	
-	public Retorno(Token tipoDato) {
-	
-		this.tipoDato = tipoDato;
+	private Expresion expresion;
+
+	public Retorno(Expresion expresion) {
+
+		this.expresion = expresion;
 	}
 
-
-
-	@Override
 	public TreeItem<String> getArbolVisual() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		TreeItem<String> raiz = new TreeItem<>("Retorno");
+		raiz.getChildren().add(expresion.getArbolVisual());
 
+		return raiz;
 
-
-	public Token getTipoDato() {
-		return tipoDato;
-	}
-
-
-
-	public void setTipoDato(Token tipoDato) {
-		this.tipoDato = tipoDato;
 	}
 
 }

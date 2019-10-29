@@ -216,7 +216,7 @@ public class AnalizadorLexico {
 		if (Character.isLetter(caracterActual)) {
 			String palabra = "";
 			String[] reservadas = { "call", "method", "Z", "R", "regret", "cicle", "con", "start", "bin", "void",
-					"text", "char", "list", "show", "read", "pika" };
+					"text", "char", "list", "show", "read", "pacman", "interrupt", "measure" };
 			int fila = filaActual;
 			int columna = columnaActual;
 

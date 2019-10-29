@@ -226,26 +226,86 @@ public class AnalizadorSintactico {
 			return expr;
 		}
 
+		expr = esIncremental();
+		if (expr != null) {
+			return expr;
+		}
+
+		expr = esInterrupcion();
+		if (expr != null) {
+			return expr;
+		}
+
+		expr = esMedida();
+		if (expr != null) {
+			return expr;
+		}
+
 		return null;
 
 	}
 
 	/**
-	 * <Retorno>::= regret <Expresion>"!"
+	 * <Incremental> ::= pacman identificador !
 	 * 
-	 * @return
+	 * @return Incremental
 	 */
-	public Sentencia esRetorno() {
-		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("regret")) {
+
+	private Incremental esIncremental() {
+
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("pacman")) {
 			obtenerSiguienteToken();
-
-			Expresion expresion = esExpresion();
-
-			if (expresion != null) {
+			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
 				Token identificador = tokenActual;
 				obtenerSiguienteToken();
-				if (tokenActual.getCategoria() != Categoria.TERMINAL) {
-					return new Retorno(identificador);
+
+				if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+					obtenerSiguienteToken();
+					return new Incremental(identificador);
+				} else {
+					reportarError("Falta el fin de linea ");
+				}
+			} else {
+				reportarError("Falta el identficador");
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * <Incremental> ::= interrupt!
+	 * 
+	 * @return Interrupcion
+	 */
+
+	private Interrupcion esInterrupcion() {
+
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("interrupt")) {
+			obtenerSiguienteToken();
+
+			if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+				obtenerSiguienteToken();
+				return new Interrupcion();
+			} else {
+				reportarError("Falta el fin de linea");
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * <Retorno>::= regret <Expresion>"!"
+	 * 
+	 * @return Retorno
+	 */
+	public Retorno esRetorno() {
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("regret")) {
+			obtenerSiguienteToken();
+			Expresion expresion = esExpresion();
+			if (expresion != null) {
+				if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+					obtenerSiguienteToken();
+					return new Retorno(expresion);
 				} else {
 					reportarError("Falta el fin de linea");
 				}
@@ -260,10 +320,10 @@ public class AnalizadorSintactico {
 	 * 
 	 * <InvocacionDeFuncion>::= call identificador "(" [<ListaArgumentos>] ")" "!"
 	 * 
-	 * @return
+	 * @return InvocacionDeFuncion
 	 */
 
-	public Sentencia esInvocacionDeFuncion() {
+	public InvocacionDeFuncion esInvocacionDeFuncion() {
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("call")) {
 			obtenerSiguienteToken();
 			if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
@@ -300,7 +360,7 @@ public class AnalizadorSintactico {
 	 * 
 	 * @return Lectura
 	 */
-	public Sentencia esLectura() {
+	public Lectura esLectura() {
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("read")) {
 			obtenerSiguienteToken();
 			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
@@ -334,11 +394,60 @@ public class AnalizadorSintactico {
 
 	/**
 	 * 
+	 * <Medida>::= measure "(" identificadorArreglo "," identificadorVariable ")" !
+	 * 
+	 * @return Impresion
+	 */
+	public Medida esMedida() {
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("measure")) {
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
+				obtenerSiguienteToken();
+				if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+					Token identificadorArreglo = tokenActual;
+					obtenerSiguienteToken();
+					if (tokenActual.getCategoria() == Categoria.SEPARADOR) {
+						obtenerSiguienteToken();
+						if (tokenActual.getCategoria() == Categoria.IDENTIFICADOR) {
+							Token identificadorVariable = tokenActual;
+							obtenerSiguienteToken();
+							if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
+								obtenerSiguienteToken();
+								if (tokenActual.getCategoria() == Categoria.TERMINAL) {
+									obtenerSiguienteToken();
+									return new Medida(identificadorArreglo, identificadorVariable);
+								} else {
+									reportarError("Falta el fin de linea");
+								}
+							} else {
+								reportarError("Falta paréntesis derecho");
+							}
+						} else {
+							reportarError("Falta el identificador de la variable");
+						}
+					} else {
+						reportarError("Falta la coma");
+					}
+
+				} else {
+					reportarError("Falta el identificador del arreglo");
+				}
+			} else {
+				reportarError("Falta paréntesis izquierdo");
+			}
+		}
+
+		return null;
+
+	}
+
+	/**
+	 * 
 	 * <Impresion> show "(" <ExpresionCadena> ")" "!"
 	 * 
 	 * @return Impresion
 	 */
-	public Sentencia esImpresion() {
+	public Impresion esImpresion() {
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("show")) {
 			obtenerSiguienteToken();
 			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
@@ -367,6 +476,61 @@ public class AnalizadorSintactico {
 
 		return null;
 
+	}
+
+	/**
+	 * 
+	 * * <Condicion> ::= con "("<ExpresionLogica>")" "{" <BloqueSentencias> "}"
+	 * 
+	 * @return Condicion
+	 */
+	public Condicion esMenu() {
+		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("con")) {
+			obtenerSiguienteToken();
+			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
+				obtenerSiguienteToken();
+				ExpresionLogica expLog = esExpresionLogica();
+				if (expLog != null) {
+
+					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
+						obtenerSiguienteToken();
+
+						if (tokenActual.getCategoria() == Categoria.LLAVE_APERTURA) {
+							obtenerSiguienteToken();
+
+							ArrayList<Sentencia> bloqueSentencias = esBloqueSentencias();
+
+							if (bloqueSentencias != null) {
+
+								if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
+									obtenerSiguienteToken();
+									return new Condicion(expLog, bloqueSentencias);
+								} else {
+
+									reportarError("Falta cerrar llaves");
+								}
+
+							} else {
+								reportarError("Faltó el bloque de sentencias en la función");
+							}
+
+						} else {
+
+							reportarError("Falta abrir llaves");
+						}
+
+					} else {
+						reportarError("Falta paréntesis derecho");
+					}
+				} else {
+					reportarError("Falta la condicion");
+				}
+			} else {
+				reportarError("Falta paréntesis izquierdo");
+			}
+
+		}
+		return null;
 	}
 
 	/**
@@ -602,29 +766,23 @@ public class AnalizadorSintactico {
 	 */
 	public Expresion esExpresion() {
 		Expresion expr = null;
-
 		expr = esExpresionAritmetica();
 		if (expr != null) {
 			return expr;
 		}
-
 		expr = esExpresionLogica();
 		if (expr != null) {
 			return expr;
 		}
-
 		expr = esExpresionRelacional();
 		if (expr != null) {
 			return expr;
 		}
-
 		expr = esExpresionCadena();
 		if (expr != null) {
 			return expr;
 		}
-
 		return null;
-
 	}
 
 	/**

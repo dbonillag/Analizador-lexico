@@ -1,7 +1,5 @@
 /Sintaxis.class
-/.gitignore
+/semantica/
+/sintaxis/
 /controlador/
 /lexico/
-/sintaxis/
-/vista/
-/semantica/

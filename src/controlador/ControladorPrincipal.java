@@ -73,18 +73,22 @@ public class ControladorPrincipal {
 
 		campoTexto.setText("method @metodo bin (@a bin,@b text):\r\n" + 
 				"@a=5!\r\n" + 
+				"pacman @a!\r\n" + 
 				"@a=4p(5p3)!\r\n" + 
 				"read(@a)!\r\n" + 
 				"show(\"cadena\")!\r\n" + 
 				"cicle(5>4){\r\n" + 
 				"@a=6!\r\n" + 
+				"interrupt!\r\n" + 
 				"}\r\n" + 
+				"measure(@arreglo,@variable)!\r\n" + 
 				"con(5==4){\r\n" + 
 				"@a=8!\r\n" + 
 				"}\r\n" + 
 				"call @metodoAInvocar(@a,5p4)!\r\n" + 
 				"text @miCadena!\r\n"+
 				"list [text,5] @miArreglo!\r\n"+
+				"regret @valor!\r\n" + 
 				":\r\n" + 
 				"¿Is this the real life?\r\n" + 
 				"¿¿\r\n" + 
