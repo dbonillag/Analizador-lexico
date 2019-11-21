@@ -1,7 +1,11 @@
 package sintaxis;
 
+import java.util.ArrayList;
+
 import javafx.scene.control.TreeItem;
 import lexico.Token;
+import semantica.Simbolo;
+import semantica.TablaSimbolos;
 
 public class Arreglo extends Sentencia {
 
@@ -23,5 +27,12 @@ public class Arreglo extends Sentencia {
 		raiz.getChildren().add(new TreeItem<>("Tamaño: " + tamanio.getPalabra()));
 
 		return raiz;
+	}
+
+	@Override
+	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos,Simbolo ambito) {
+		
+		tablaSimbolos.guardarSimboloVariable(identificador.getPalabra(), tipoDato.getPalabra(), identificador.getFila(), identificador.getColumna(), ambito);
+		
 	}
 }

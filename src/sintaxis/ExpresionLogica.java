@@ -6,7 +6,7 @@ import lexico.Token;
 public class ExpresionLogica extends Expresion {
 
 	ExpresionRelacional expresionRelacionalIzq, expresionRelacionalDer;
-	Token operadorLogico;
+	Token operadorLogicoIzq,operadorLogico;
 
 	public ExpresionLogica(ExpresionRelacional expresionRelacionalIzq, ExpresionRelacional expresionRelacionalDer,
 			Token operadorLogico) {
@@ -15,11 +15,35 @@ public class ExpresionLogica extends Expresion {
 		this.expresionRelacionalDer = expresionRelacionalDer;
 		this.operadorLogico = operadorLogico;
 	}
+	
+	
+
+	public ExpresionLogica(Token operadorLogicoIzq,ExpresionRelacional expresionRelacionalIzq) {
+		super();
+		this.expresionRelacionalIzq = expresionRelacionalIzq;
+		this.operadorLogicoIzq = operadorLogicoIzq;
+	}
+
+	
 
 	public ExpresionLogica(ExpresionRelacional expresionRelacional) {
 		super();
 		this.expresionRelacionalIzq = expresionRelacional;
 	}
+	
+	
+
+	public Token getOperadorLogicoIzq() {
+		return operadorLogicoIzq;
+	}
+
+
+
+	public void setOperadorLogicoIzq(Token operadorLogicoIzq) {
+		this.operadorLogicoIzq = operadorLogicoIzq;
+	}
+
+
 
 	public ExpresionRelacional getExpresionRelacionalIzq() {
 		return expresionRelacionalIzq;

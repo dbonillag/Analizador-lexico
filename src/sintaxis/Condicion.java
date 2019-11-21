@@ -4,13 +4,24 @@ import java.util.ArrayList;
 
 
 import javafx.scene.control.TreeItem;
+import lexico.Token;
+import semantica.Simbolo;
+import semantica.TablaSimbolos;
 
 public class Condicion extends Sentencia {
-
+	
+	private static int serie = 0;
+	private int id;
+	
+	private Token con;
 	private ExpresionLogica expLogica;
 	private ArrayList<Sentencia> bloqueSentencias;
 
-	public Condicion(ExpresionLogica expLog, ArrayList<Sentencia> bloqueSentencias) {
+	public Condicion(Token con, ExpresionLogica expLog, ArrayList<Sentencia> bloqueSentencias) {
+		serie++;
+		id=serie;
+		this.con=con;
+		
 		this.expLogica = expLog;
 		this.bloqueSentencias = bloqueSentencias;
 	}
@@ -30,5 +41,19 @@ public class Condicion extends Sentencia {
 		}
 		return raiz;
 
+	}
+
+	@Override
+	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		/*
+		tablaSimbolos.guardarSimboloVariable("_con_" + id, null, con.getFila(), con.getColumna(), ambito);
+
+		ambito = tablaSimbolos.buscarSimboloVariable("_con_" + id, ambito);
+		*/
+
+		for (Sentencia sentencia : bloqueSentencias) {
+			sentencia.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito);
+		}
+		
 	}
 }

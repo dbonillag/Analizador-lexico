@@ -9,18 +9,17 @@ public class Simbolo {
 	private String nombre;
 	private String tipo;
 	private int fila, columna;
-	private String ambito;
-	private Expresion expresion;
+	private Simbolo ambito;
 	private ArrayList<String> tipoParametros;
 
 	// Para instanciar variable
-	public Simbolo(String nombre, String tipo, int fila, int columna, String ambito, Expresion expresion) {
+	public Simbolo(String nombre, String tipo, int fila, int columna, Simbolo ambito) {
 		this.nombre = nombre;
 		this.tipo = tipo;
 		this.fila = fila;
 		this.columna = columna;
 		this.ambito = ambito;
-		this.expresion = expresion;
+		
 	}
 
 	// Para instanciar Funciones
@@ -63,21 +62,15 @@ public class Simbolo {
 		this.columna = columna;
 	}
 
-	public String getAmbito() {
+
+	public Simbolo getAmbito() {
 		return ambito;
 	}
 
-	public void setAmbito(String ambito) {
+	public void setAmbito(Simbolo ambito) {
 		this.ambito = ambito;
 	}
 
-	public Expresion getExpresion() {
-		return expresion;
-	}
-
-	public void setExpresion(Expresion expresion) {
-		this.expresion = expresion;
-	}
 
 	public ArrayList<String> getTipoParametros() {
 		return tipoParametros;

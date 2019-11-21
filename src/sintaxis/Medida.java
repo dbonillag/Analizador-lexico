@@ -1,7 +1,11 @@
 package sintaxis;
 
+import java.util.ArrayList;
+
 import javafx.scene.control.TreeItem;
 import lexico.Token;
+import semantica.Simbolo;
+import semantica.TablaSimbolos;
 
 public class Medida extends Sentencia {
 
@@ -21,5 +25,11 @@ public class Medida extends Sentencia {
 
 		return raiz;
 
+	}
+
+	@Override
+	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		// TODO Auto-generated method stub
+		
 	}
 }

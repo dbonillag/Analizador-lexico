@@ -1,7 +1,12 @@
 package sintaxis;
 
+import java.util.ArrayList;
+
 import javafx.scene.control.TreeItem;
+import lexico.Categoria;
 import lexico.Token;
+import semantica.Simbolo;
+import semantica.TablaSimbolos;
 
 public class Asignacion extends Sentencia {
 
@@ -24,6 +29,44 @@ public class Asignacion extends Sentencia {
 		raiz.getChildren().add(expresion.getArbolVisual());
 
 		return raiz;
+
+	}
+
+	@Override
+	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		// TODO Auto-generated method stub
+
+	}
+
+	
+	/*
+	 * if (tokenActual.getCategoria() == Categoria.RESERVADA && (tokenActual.getPalabra().equals("Z")
+				|| tokenActual.getPalabra().equals("R") || tokenActual.getPalabra().equals("bin")
+				|| tokenActual.getPalabra().equals("text") || tokenActual.getPalabra().equals("char"))) {
+			return tokenActual;
+		}
+
+	 */
+	@Override
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		Simbolo s = tablaSimbolos.buscarSimboloVariable(identificador.getPalabra(), ambito, identificador.getFila(),
+				identificador.getColumna());
+
+		if (s == null) {
+			erroresSemanticos.add("La variable"+identificador.getPalabra()+" no existe");
+		} else {
+
+			if (expresion != null) {
+
+				if (!s.getTipo().equals(expresion.obtenerTipo())) {
+					erroresSemanticos.add("El tipo de la expresión no es correcto");
+				}
+			}
+		}
+
+		if (expresion != null) {
+			expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		}
 
 	}
 

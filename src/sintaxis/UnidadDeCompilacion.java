@@ -31,8 +31,19 @@ public class UnidadDeCompilacion {
 		return raiz;
 	}
 
-	public void llenarTablaDeSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> listaErrores) {
-		// TODO aqui quedamos en clase
+	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos) {
+		for(Funcion f : listaFunciones) {
+			f.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos);
+		}
 	}
+
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos) {
+		
+		for(Funcion f : listaFunciones) {
+			f.analizarSemantica(tablaSimbolos, erroresSemanticos);
+		}
+		
+	}
+	
 
 }

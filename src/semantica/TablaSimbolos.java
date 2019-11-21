@@ -14,11 +14,10 @@ public class TablaSimbolos {
 		this.listaErrores = listaErrores;
 	}
 
-	public void guardarSimboloVariable(String nombre, String tipo, int fila, int columna, String ambito,
-			Expresion expresion) {
-		Simbolo s = buscarSimboloVariable(nombre, ambito);
+	public void guardarSimboloVariable(String nombre, String tipo, int fila, int columna, Simbolo ambito) {
+		Simbolo s = buscarSimboloVariable(nombre, ambito,fila,columna);
 		if (s == null) {
-			listaSimbolos.add(new Simbolo(nombre, tipo, fila, columna, ambito, expresion));
+			listaSimbolos.add(new Simbolo(nombre, tipo, fila, columna, ambito));
 		} else {
 			listaErrores.add("La variable " + nombre + " ya existe en el ambito " + ambito);
 		}
@@ -36,10 +35,10 @@ public class TablaSimbolos {
 
 	}
 
-	public Simbolo buscarSimboloVariable(String nombre, String ambito) {
+	public Simbolo buscarSimboloVariable(String nombre, Simbolo ambito,int fila, int columna) {
 		for (Simbolo simbolo : listaSimbolos) {
 			if (ambito != null) {
-				if (nombre.equals(simbolo.getNombre()) && ambito.equals(simbolo.getAmbito())) {
+				if (nombre.equals(simbolo.getNombre()) && ambito.equals(simbolo.getAmbito())&&((fila==simbolo.getFila()&&columna>=simbolo.getColumna())||(fila>simbolo.getFila()))) {
 					return simbolo;
 				}
 			}

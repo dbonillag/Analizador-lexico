@@ -1,7 +1,11 @@
 package sintaxis;
 
+import java.util.ArrayList;
+
 import javafx.scene.control.TreeItem;
 import lexico.Token;
+import semantica.Simbolo;
+import semantica.TablaSimbolos;
 
 public class Lectura extends Sentencia {
 
@@ -17,5 +21,17 @@ public class Lectura extends Sentencia {
 		raiz.getChildren().add(new TreeItem<>("Identificador: " + identificador.getPalabra()));
 		return raiz;
 
+	}
+	
+	
+	public void analizarSemantica(TablaSimbolos tablaSimbolos,ArrayList<String> errores, Simbolo ambito) {
+		
+		
+	}
+
+	@Override
+	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -6,4 +6,6 @@ public abstract class Expresion {
 
 	public abstract TreeItem<String> getArbolVisual();
 
+	public abstract String obtenerTipo();
+
 }

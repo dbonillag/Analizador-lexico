@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import semantica.AnalizadorSemantico;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -129,6 +130,10 @@ public class ControladorPrincipal {
 		for (ErrorSintactico error : analizadorSintactico.getListaErrores()) {
 			campoErrores.appendText(error.toString() + "\n");
 		}
+		
+		AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico(uc);
+		analizadorSemantico.llenarTablaSimbolos();
+		
 
 	}
 

@@ -478,60 +478,7 @@ public class AnalizadorSintactico {
 
 	}
 
-	/**
-	 * 
-	 * * <Condicion> ::= con "("<ExpresionLogica>")" "{" <BloqueSentencias> "}"
-	 * 
-	 * @return Condicion
-	 */
-	public Condicion esMenu() {
-		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("con")) {
-			obtenerSiguienteToken();
-			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
-				obtenerSiguienteToken();
-				ExpresionLogica expLog = esExpresionLogica();
-				if (expLog != null) {
-
-					if (tokenActual.getCategoria() == Categoria.PARENTESIS_CIERRE) {
-						obtenerSiguienteToken();
-
-						if (tokenActual.getCategoria() == Categoria.LLAVE_APERTURA) {
-							obtenerSiguienteToken();
-
-							ArrayList<Sentencia> bloqueSentencias = esBloqueSentencias();
-
-							if (bloqueSentencias != null) {
-
-								if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
-									obtenerSiguienteToken();
-									return new Condicion(expLog, bloqueSentencias);
-								} else {
-
-									reportarError("Falta cerrar llaves");
-								}
-
-							} else {
-								reportarError("Faltó el bloque de sentencias en la función");
-							}
-
-						} else {
-
-							reportarError("Falta abrir llaves");
-						}
-
-					} else {
-						reportarError("Falta paréntesis derecho");
-					}
-				} else {
-					reportarError("Falta la condicion");
-				}
-			} else {
-				reportarError("Falta paréntesis izquierdo");
-			}
-
-		}
-		return null;
-	}
+	
 
 	/**
 	 * 
@@ -541,6 +488,7 @@ public class AnalizadorSintactico {
 	 */
 	public Ciclo esCiclo() {
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("cicle")) {
+			Token cicle = tokenActual;
 			obtenerSiguienteToken();
 			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
 				obtenerSiguienteToken();
@@ -559,7 +507,7 @@ public class AnalizadorSintactico {
 
 								if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
 									obtenerSiguienteToken();
-									return new Ciclo(expLog, bloqueSentencias);
+									return new Ciclo(cicle,expLog, bloqueSentencias);
 								} else {
 
 									reportarError("Falta cerrar llaves");
@@ -596,6 +544,7 @@ public class AnalizadorSintactico {
 	 */
 	public Condicion esCondicion() {
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("con")) {
+			Token con = tokenActual;
 			obtenerSiguienteToken();
 			if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
 				obtenerSiguienteToken();
@@ -614,7 +563,7 @@ public class AnalizadorSintactico {
 
 								if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
 									obtenerSiguienteToken();
-									return new Condicion(expLog, bloqueSentencias);
+									return new Condicion(con,expLog, bloqueSentencias);
 								} else {
 
 									reportarError("Falta cerrar llaves");
@@ -774,10 +723,7 @@ public class AnalizadorSintactico {
 		if (expr != null) {
 			return expr;
 		}
-		expr = esExpresionRelacional();
-		if (expr != null) {
-			return expr;
-		}
+		
 		expr = esExpresionCadena();
 		if (expr != null) {
 			return expr;
@@ -843,7 +789,27 @@ public class AnalizadorSintactico {
 	 * @return
 	 */
 	public ExpresionLogica esExpresionLogica() {
+		
+		if(tokenActual.getCategoria()== Categoria.LOGICO) {
+			Token opLogicoIzq = tokenActual;
+			obtenerSiguienteToken();
+			
+			ExpresionRelacional ExpRelIzq = (ExpresionRelacional) esExpresionRelacional();
+
+			if (ExpRelIzq != null) {
+
+				return new ExpresionLogica(opLogicoIzq,ExpRelIzq);
+			}else {
+				
+				reportarError("Falta una expresión logica");
+				
+			}
+			
+			
+		}
+		
 		ExpresionRelacional expRelIzq = (ExpresionRelacional) esExpresionRelacional();
+		
 		if (expRelIzq != null) {
 			// obtenerSiguienteToken();
 			if (tokenActual.getCategoria() == Categoria.LOGICO) {
@@ -866,8 +832,8 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * <ExpresionAritmetica> ::= <Termino>[operacionAritmetica
-	 * <ExpresionAritmetica>] | "("<ExpresionAritmetica>")"[operacionAritmetica
+	 * <ExpresionAritmetica> ::= <Termino>[operadorAritmetica
+	 * <ExpresionAritmetica>] | "("<ExpresionAritmetica>")"[operadorAritmetico
 	 * <ExpresionAritmetica>]
 	 * 
 	 * @return ExpresionAritmetica
