@@ -15,7 +15,7 @@ public class TablaSimbolos {
 	}
 
 	public void guardarSimboloVariable(String nombre, String tipo, int fila, int columna, Simbolo ambito) {
-		Simbolo s = buscarSimboloVariable(nombre, ambito,fila,columna);
+		Simbolo s = buscarSimboloVariable(nombre, ambito, fila, columna);
 		if (s == null) {
 			listaSimbolos.add(new Simbolo(nombre, tipo, fila, columna, ambito));
 		} else {
@@ -35,10 +35,12 @@ public class TablaSimbolos {
 
 	}
 
-	public Simbolo buscarSimboloVariable(String nombre, Simbolo ambito,int fila, int columna) {
+	public Simbolo buscarSimboloVariable(String nombre, Simbolo ambito, int fila, int columna) {
 		for (Simbolo simbolo : listaSimbolos) {
 			if (ambito != null) {
-				if (nombre.equals(simbolo.getNombre()) && ambito.equals(simbolo.getAmbito())&&((fila==simbolo.getFila()&&columna>=simbolo.getColumna())||(fila>simbolo.getFila()))) {
+				if (nombre.equals(simbolo.getNombre()) && ambito.equals(simbolo.getAmbito())
+						&& ((fila == simbolo.getFila() && columna >= simbolo.getColumna())
+								|| (fila > simbolo.getFila()))) {
 					return simbolo;
 				}
 			}

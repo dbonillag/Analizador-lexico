@@ -37,28 +37,25 @@ public class Asignacion extends Sentencia {
 		// TODO Auto-generated method stub
 
 	}
-
-	
 	/*
-	 * if (tokenActual.getCategoria() == Categoria.RESERVADA && (tokenActual.getPalabra().equals("Z")
-				|| tokenActual.getPalabra().equals("R") || tokenActual.getPalabra().equals("bin")
-				|| tokenActual.getPalabra().equals("text") || tokenActual.getPalabra().equals("char"))) {
-			return tokenActual;
-		}
-
+	 * if (tokenActual.getCategoria() == Categoria.RESERVADA &&
+	 * (tokenActual.getPalabra().equals("Z") || tokenActual.getPalabra().equals("R")
+	 * || tokenActual.getPalabra().equals("bin") ||
+	 * tokenActual.getPalabra().equals("text") ||
+	 * tokenActual.getPalabra().equals("char"))) { return tokenActual; }
+	 * 
 	 */
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		Simbolo s = tablaSimbolos.buscarSimboloVariable(identificador.getPalabra(), ambito, identificador.getFila(),
-				identificador.getColumna());
 
-		if (s == null) {
-			erroresSemanticos.add("La variable"+identificador.getPalabra()+" no existe");
+		Simbolo simbolo = tablaSimbolos.buscarSimboloVariable(identificador.getPalabra(), ambito,
+				identificador.getFila(), identificador.getColumna());
+
+		if (simbolo == null) {
+			erroresSemanticos.add("La variable" + identificador.getPalabra() + " no existe");
 		} else {
-
 			if (expresion != null) {
-
-				if (!s.getTipo().equals(expresion.obtenerTipo())) {
+				if (!simbolo.getTipo().equals(expresion.obtenerTipo())) {
 					erroresSemanticos.add("El tipo de la expresión no es correcto");
 				}
 			}

@@ -1,7 +1,11 @@
 package sintaxis;
 
+import java.util.ArrayList;
+
 import javafx.scene.control.TreeItem;
 import lexico.Token;
+import semantica.Simbolo;
+import semantica.TablaSimbolos;
 
 public class ExpresionLogica extends Expresion {
 
@@ -83,6 +87,22 @@ public class ExpresionLogica extends Expresion {
 		}
 
 		return raiz;
+	}
+
+
+
+	@Override
+	public String obtenerTipo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

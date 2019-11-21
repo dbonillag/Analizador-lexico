@@ -32,8 +32,8 @@ public class UnidadDeCompilacion {
 	}
 
 	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos) {
-		for(Funcion f : listaFunciones) {
-			f.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos);
+		for(Funcion funcion : listaFunciones) {
+			funcion.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos);
 		}
 	}
 

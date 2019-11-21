@@ -41,13 +41,24 @@ public class Ciclo extends Sentencia {
 	@Override
 	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
 
-		/*tablaSimbolos.guardarSimboloVariable("_ciclo_" + id, null, cicle.getFila(), cicle.getColumna(), ambito);
-
-		ambito = tablaSimbolos.buscarSimboloVariable("_ciclo_" + id, ambito);*/
+		/*
+		 * tablaSimbolos.guardarSimboloVariable("_ciclo_" + id, null, cicle.getFila(),
+		 * cicle.getColumna(), ambito);
+		 * 
+		 * ambito = tablaSimbolos.buscarSimboloVariable("_ciclo_" + id, ambito);
+		 */
 
 		for (Sentencia sentencia : bloqueSentencias) {
 			sentencia.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito);
 		}
 
 	}
+
+	@Override
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

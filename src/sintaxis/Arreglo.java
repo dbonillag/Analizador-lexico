@@ -31,8 +31,13 @@ public class Arreglo extends Sentencia {
 
 	@Override
 	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos,Simbolo ambito) {
-		
 		tablaSimbolos.guardarSimboloVariable(identificador.getPalabra(), tipoDato.getPalabra(), identificador.getFila(), identificador.getColumna(), ambito);
+		
+	}
+
+	@Override
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		
 		
 	}
 }

@@ -251,7 +251,7 @@ public class AnalizadorSintactico {
 	 * @return Incremental
 	 */
 
-	private Incremental esIncremental() {
+	public Incremental esIncremental() {
 
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("pacman")) {
 			obtenerSiguienteToken();
@@ -278,7 +278,7 @@ public class AnalizadorSintactico {
 	 * @return Interrupcion
 	 */
 
-	private Interrupcion esInterrupcion() {
+	public Interrupcion esInterrupcion() {
 
 		if (tokenActual.getCategoria() == Categoria.RESERVADA && tokenActual.getPalabra().equals("interrupt")) {
 			obtenerSiguienteToken();
@@ -478,8 +478,6 @@ public class AnalizadorSintactico {
 
 	}
 
-	
-
 	/**
 	 * 
 	 * * <Ciclo> ::= cicle "("<ExpresionLogica>")" "{" <BloqueSentencias> "}"
@@ -507,7 +505,7 @@ public class AnalizadorSintactico {
 
 								if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
 									obtenerSiguienteToken();
-									return new Ciclo(cicle,expLog, bloqueSentencias);
+									return new Ciclo(cicle, expLog, bloqueSentencias);
 								} else {
 
 									reportarError("Falta cerrar llaves");
@@ -563,7 +561,7 @@ public class AnalizadorSintactico {
 
 								if (tokenActual.getCategoria() == Categoria.LLAVE_CIERRE) {
 									obtenerSiguienteToken();
-									return new Condicion(con,expLog, bloqueSentencias);
+									return new Condicion(con, expLog, bloqueSentencias);
 								} else {
 
 									reportarError("Falta cerrar llaves");
@@ -723,7 +721,7 @@ public class AnalizadorSintactico {
 		if (expr != null) {
 			return expr;
 		}
-		
+
 		expr = esExpresionCadena();
 		if (expr != null) {
 			return expr;
@@ -789,27 +787,26 @@ public class AnalizadorSintactico {
 	 * @return
 	 */
 	public ExpresionLogica esExpresionLogica() {
-		
-		if(tokenActual.getCategoria()== Categoria.LOGICO) {
+
+		if (tokenActual.getCategoria() == Categoria.LOGICO) {
 			Token opLogicoIzq = tokenActual;
 			obtenerSiguienteToken();
-			
+
 			ExpresionRelacional ExpRelIzq = (ExpresionRelacional) esExpresionRelacional();
 
 			if (ExpRelIzq != null) {
 
-				return new ExpresionLogica(opLogicoIzq,ExpRelIzq);
-			}else {
-				
+				return new ExpresionLogica(opLogicoIzq, ExpRelIzq);
+			} else {
+
 				reportarError("Falta una expresión logica");
-				
+
 			}
-			
-			
+
 		}
-		
+
 		ExpresionRelacional expRelIzq = (ExpresionRelacional) esExpresionRelacional();
-		
+
 		if (expRelIzq != null) {
 			// obtenerSiguienteToken();
 			if (tokenActual.getCategoria() == Categoria.LOGICO) {
@@ -832,9 +829,7 @@ public class AnalizadorSintactico {
 	}
 
 	/**
-	 * <ExpresionAritmetica> ::= <Termino>[operadorAritmetica
-	 * <ExpresionAritmetica>] | "("<ExpresionAritmetica>")"[operadorAritmetico
-	 * <ExpresionAritmetica>]
+	 * <EA> ::= <Termino>[op.Arit<EA>] | "("<EA>")"[op.Arit<EA>]
 	 * 
 	 * @return ExpresionAritmetica
 	 */
@@ -860,7 +855,6 @@ public class AnalizadorSintactico {
 			} else {
 				return new ExpresionAritmetica(termino);
 			}
-
 		}
 
 		if (tokenActual.getCategoria() == Categoria.PARENTESIS_APERTURA) {
@@ -884,19 +878,15 @@ public class AnalizadorSintactico {
 						} else {
 							reportarError("Falta expresión aritmética");
 						}
-
 					} else {
 						return new ExpresionAritmetica(ea);
 					}
-
 				} else {
 					reportarError("Falta paréntesis derecho");
 				}
-
 			} else {
 				reportarError("Falta expresión aritmética");
 			}
-
 		}
 
 		return null;

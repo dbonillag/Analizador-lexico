@@ -1,7 +1,12 @@
 package sintaxis;
 
+import java.util.ArrayList;
+
 import javafx.scene.control.TreeItem;
+import lexico.Categoria;
 import lexico.Token;
+import semantica.Simbolo;
+import semantica.TablaSimbolos;
 
 public class ExpresionAritmetica extends Expresion {
 
@@ -80,7 +85,36 @@ public class ExpresionAritmetica extends Expresion {
 
 	@Override
 	public String obtenerTipo() {
-		if()
+		return null;
+	}
+
+	@Override
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		// TODO Auto-generated method stub
+	if(termino!=null) {
+			
+			if( termino.getCategoria() == Categoria.IDENTIFICADOR ) {
+				
+				Simbolo s = tablaSimbolos.buscarSimboloVariable(termino.getPalabra(), ambito, termino.getFila(), termino.getColumna());
+				
+				if(s==null) {
+					erroresSemanticos.add("La variable "+termino.getPalabra()+" no existe");
+				}else {
+					if( ! (s.getTipo().equals("int") || s.getTipo().equals("decimal")) ) {
+						erroresSemanticos.add("La variable "+termino.getPalabra()+" no es numérica");
+					}
+				}
+			}
+		}
+		
+		if(expresionAritmetica1!=null) {
+			expresionAritmetica1.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		}
+		
+		if(expresionAritmetica2!=null) {
+			expresionAritmetica2.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		}
+		
 	}
 
 }

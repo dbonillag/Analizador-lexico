@@ -15,19 +15,18 @@ public class AnalizadorSemantico {
 		this.erroresSemanticos = new ArrayList<String>();
 		this.tablaSimbolos = new TablaSimbolos(erroresSemanticos);
 		uc.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos);
-
 	}
-	
-	public AnalizadorSemantico( UnidadDeCompilacion uc ) {
+
+	public AnalizadorSemantico(UnidadDeCompilacion uc) {
 		this.erroresSemanticos = new ArrayList<String>();
-		this.tablaSimbolos = new TablaSimbolos( erroresSemanticos );
+		this.tablaSimbolos = new TablaSimbolos(erroresSemanticos);
 		this.uc = uc;
 	}
-	
+
 	public void llenarTablaSimbolos() {
 		uc.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos);
 	}
-	
+
 	public void analizarSemantica() {
 		uc.analizarSemantica(tablaSimbolos, erroresSemanticos);
 	}
@@ -47,7 +46,5 @@ public class AnalizadorSemantico {
 	public void setErroresSemanticos(ArrayList<String> erroresSemanticos) {
 		this.erroresSemanticos = erroresSemanticos;
 	}
-	
-	
 
 }

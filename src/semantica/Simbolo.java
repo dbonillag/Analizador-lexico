@@ -19,7 +19,7 @@ public class Simbolo {
 		this.fila = fila;
 		this.columna = columna;
 		this.ambito = ambito;
-		
+
 	}
 
 	// Para instanciar Funciones
@@ -62,7 +62,6 @@ public class Simbolo {
 		this.columna = columna;
 	}
 
-
 	public Simbolo getAmbito() {
 		return ambito;
 	}
@@ -70,7 +69,6 @@ public class Simbolo {
 	public void setAmbito(Simbolo ambito) {
 		this.ambito = ambito;
 	}
-
 
 	public ArrayList<String> getTipoParametros() {
 		return tipoParametros;

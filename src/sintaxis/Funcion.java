@@ -81,10 +81,9 @@ public class Funcion {
 
 	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos) {
 		ArrayList<String> tipoParametros = new ArrayList<>();
+
 		for (Parametro parametro : parametros) {
-
 			tipoParametros.add(parametro.getTipoDato().getPalabra());
-
 		}
 
 		if (tipoRetorno != null) {
@@ -93,35 +92,32 @@ public class Funcion {
 			tablaSimbolos.guardarSimboloFuncion(nombre.getPalabra(), "void", tipoParametros);
 		}
 
-		Simbolo ambito=tablaSimbolos.buscarSimboloFuncion(nombre.getPalabra(), tipoParametros);
-		
-		for (Parametro parametro : parametros) {
-			
-			tablaSimbolos.guardarSimboloVariable(parametro.getNombre().getPalabra(), parametro.getTipoDato().getPalabra(),parametro.getNombre().getFila() , parametro.getNombre().getColumna(), ambito);
+		Simbolo ambito = tablaSimbolos.buscarSimboloFuncion(nombre.getPalabra(), tipoParametros);
 
+		for (Parametro parametro : parametros) {
+			tablaSimbolos.guardarSimboloVariable(parametro.getNombre().getPalabra(),
+					parametro.getTipoDato().getPalabra(), parametro.getNombre().getFila(),
+					parametro.getNombre().getColumna(), ambito);
 		}
-		
-		
+
 		for (Sentencia sentencia : bloqueSentencias) {
-			sentencia.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos,ambito);
+			sentencia.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos, ambito);
 		}
 	}
 
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos) {
-		
+
 		ArrayList<String> tipoParametros = new ArrayList<>();
 		for (Parametro parametro : parametros) {
-
 			tipoParametros.add(parametro.getTipoDato().getPalabra());
+		}
 
-		}
-		
-		Simbolo ambito=tablaSimbolos.buscarSimboloFuncion(nombre.getPalabra(), tipoParametros);
-		
+		Simbolo ambito = tablaSimbolos.buscarSimboloFuncion(nombre.getPalabra(), tipoParametros);
+
 		for (Sentencia sentencia : bloqueSentencias) {
-			sentencia.analizarSemantica(tablaSimbolos, erroresSemanticos,ambito);
+			sentencia.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
 		}
-		
+
 	}
 
 }
