@@ -61,16 +61,18 @@ public class ExpresionRelacional extends Expresion {
 		return raiz;
 	}
 
-	@Override
-	public String obtenerTipo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		// TODO Auto-generated method stub
 		
+		
+	}
+
+	@Override
+	public String obtenerTipo(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		
+		return "bin";
 	}
 
 }

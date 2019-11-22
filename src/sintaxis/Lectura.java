@@ -24,8 +24,18 @@ public class Lectura extends Sentencia {
 	}
 	
 	
-	public void analizarSemantica(TablaSimbolos tablaSimbolos,ArrayList<String> errores, Simbolo ambito) {
+	public void analizarSemantica(TablaSimbolos tablaSimbolos,ArrayList<String> erroresSemanticos, Simbolo ambito) {
 		
+		Simbolo s = tablaSimbolos.buscarSimboloVariable(identificador.getPalabra(), ambito, identificador.getFila(),
+				identificador.getColumna());
+
+		if (s == null) {
+			erroresSemanticos.add("La variable " + identificador.getPalabra() + " no existe");
+		} else {
+			if (!(s.getTipo().equals("text"))) {
+				erroresSemanticos.add("La variable " + identificador.getPalabra() + " no es texto ni numerico");
+			}
+		}
 		
 	}
 

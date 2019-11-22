@@ -56,7 +56,21 @@ public class InvocacionDeFuncion extends Sentencia {
 
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		// TODO Auto-generated method stub
+		
+		ArrayList<String> tipoArgumentos = new ArrayList<>();
+		for (Expresion arg : argumentos) {
+			tipoArgumentos.add(arg.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito));
+		}
+
+		Simbolo funcion = tablaSimbolos.buscarSimboloFuncion(identificador.getPalabra(), tipoArgumentos);
+		
+		if(funcion!=null) {
+			erroresSemanticos.add("La función "+identificador+""+tipoArgumentos+" no ha sido declarada");
+		}
+			
+		
+		
+		
 		
 	}
 

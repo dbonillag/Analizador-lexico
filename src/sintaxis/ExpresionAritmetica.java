@@ -84,37 +84,75 @@ public class ExpresionAritmetica extends Expresion {
 	}
 
 	@Override
-	public String obtenerTipo() {
-		return null;
-	}
+	public String obtenerTipo(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		String tipo="";
+		if (termino != null) {
 
-	@Override
-	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		// TODO Auto-generated method stub
-	if(termino!=null) {
-			
-			if( termino.getCategoria() == Categoria.IDENTIFICADOR ) {
-				
-				Simbolo s = tablaSimbolos.buscarSimboloVariable(termino.getPalabra(), ambito, termino.getFila(), termino.getColumna());
-				
-				if(s==null) {
-					erroresSemanticos.add("La variable "+termino.getPalabra()+" no existe");
-				}else {
-					if( ! (s.getTipo().equals("int") || s.getTipo().equals("decimal")) ) {
-						erroresSemanticos.add("La variable "+termino.getPalabra()+" no es numérica");
+			if (termino.getCategoria() == Categoria.IDENTIFICADOR) {
+
+				Simbolo s = tablaSimbolos.buscarSimboloVariable(termino.getPalabra(), ambito, termino.getFila(),
+						termino.getColumna());
+
+				if (s == null) {
+					
+				} else {
+					if (s.getTipo().equals("Z") ) {
+						tipo= "Z";
+					}else if(s.getTipo().equals("R") ) {
+						tipo="R";
 					}
 				}
 			}
 		}
+
+		if (expresionAritmetica1 != null) {
+			String tipoExp=expresionAritmetica1.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito);
+			if(tipoExp=="R") {
+				tipo="R";
+			}else if(tipo!="R"&&tipoExp=="Z") {
+				tipo="Z";
+			}
+		}
+
+		if (expresionAritmetica2 != null) {
+			String tipoExp=expresionAritmetica2.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito);
+			if(tipoExp=="R") {
+				tipo="R";
+			}else if(tipo!="R"&&tipoExp=="Z") {
+				tipo="Z";
+			}
+		}
+		return tipo;
+	}
+
+	@Override
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
 		
-		if(expresionAritmetica1!=null) {
+		if (termino != null) {
+
+			if (termino.getCategoria() == Categoria.IDENTIFICADOR) {
+
+				Simbolo s = tablaSimbolos.buscarSimboloVariable(termino.getPalabra(), ambito, termino.getFila(),
+						termino.getColumna());
+
+				if (s == null) {
+					erroresSemanticos.add("La variable " + termino.getPalabra() + " no existe");
+				} else {
+					if (!(s.getTipo().equals("Z") || s.getTipo().equals("R"))) {
+						erroresSemanticos.add("La variable " + termino.getPalabra() + " no es numérica");
+					}
+				}
+			}
+		}
+
+		if (expresionAritmetica1 != null) {
 			expresionAritmetica1.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
 		}
-		
-		if(expresionAritmetica2!=null) {
+
+		if (expresionAritmetica2 != null) {
 			expresionAritmetica2.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
 		}
-		
+
 	}
 
 }

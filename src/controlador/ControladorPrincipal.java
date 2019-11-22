@@ -133,6 +133,7 @@ public class ControladorPrincipal {
 		
 		AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico(uc);
 		analizadorSemantico.llenarTablaSimbolos();
+		analizadorSemantico.analizarSemantica();
 		
 
 	}

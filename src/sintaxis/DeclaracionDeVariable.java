@@ -38,7 +38,7 @@ public class DeclaracionDeVariable extends Sentencia {
 
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

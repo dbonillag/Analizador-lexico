@@ -10,7 +10,7 @@ import semantica.TablaSimbolos;
 public class ExpresionLogica extends Expresion {
 
 	ExpresionRelacional expresionRelacionalIzq, expresionRelacionalDer;
-	Token operadorLogicoIzq,operadorLogico;
+	Token negacion,operadorLogico;
 
 	public ExpresionLogica(ExpresionRelacional expresionRelacionalIzq, ExpresionRelacional expresionRelacionalDer,
 			Token operadorLogico) {
@@ -22,10 +22,10 @@ public class ExpresionLogica extends Expresion {
 	
 	
 
-	public ExpresionLogica(Token operadorLogicoIzq,ExpresionRelacional expresionRelacionalIzq) {
+	public ExpresionLogica(Token negacion,ExpresionRelacional expresionRelacionalIzq) {
 		super();
 		this.expresionRelacionalIzq = expresionRelacionalIzq;
-		this.operadorLogicoIzq = operadorLogicoIzq;
+		this.negacion = negacion;
 	}
 
 	
@@ -37,14 +37,16 @@ public class ExpresionLogica extends Expresion {
 	
 	
 
-	public Token getOperadorLogicoIzq() {
-		return operadorLogicoIzq;
+	
+
+	public Token getNegacion() {
+		return negacion;
 	}
 
 
 
-	public void setOperadorLogicoIzq(Token operadorLogicoIzq) {
-		this.operadorLogicoIzq = operadorLogicoIzq;
+	public void setNegacion(Token negacion) {
+		this.negacion = negacion;
 	}
 
 
@@ -90,19 +92,23 @@ public class ExpresionLogica extends Expresion {
 	}
 
 
-
 	@Override
-	public String obtenerTipo() {
-		// TODO Auto-generated method stub
-		return null;
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		expresionRelacionalIzq.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		if(expresionRelacionalDer!=null)
+			
+			
+			
+			expresionRelacionalDer.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		
 	}
 
 
 
 	@Override
-	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		// TODO Auto-generated method stub
+	public String obtenerTipo(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
 		
+		return "bin";
 	}
 
 }

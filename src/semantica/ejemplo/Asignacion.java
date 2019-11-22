@@ -60,6 +60,9 @@ public class Asignacion extends Sentencia{
 		
 		Simbolo s = tablaSimbolos.buscarSimboloVariable(identificador.getLexema(), ambito, identificador.getFila(), identificador.getColumna());
 		
+		
+		
+		
 		if(s==null) {
 			erroresSemanticos.add("La variable no existe");
 		}else {

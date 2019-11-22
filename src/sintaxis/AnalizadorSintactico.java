@@ -782,21 +782,21 @@ public class AnalizadorSintactico {
 
 	/**
 	 * <ExpresionLogica> ::=
-	 * <ExpresionRelacional>|<ExpresionRelacional>OperadorLogico<ExpresionRelacional>|operadorLogico<ExpresionRelacional>
+	 * <ExpresionRelacional>|<ExpresionRelacional>OperadorLogico<ExpresionRelacional>|"~"<ExpresionRelacional>
 	 * 
 	 * @return
 	 */
 	public ExpresionLogica esExpresionLogica() {
 
-		if (tokenActual.getCategoria() == Categoria.LOGICO) {
-			Token opLogicoIzq = tokenActual;
+		if (tokenActual.getCategoria() == Categoria.LOGICO && tokenActual.getPalabra().equals("~")) {
+			Token negacion = tokenActual;
 			obtenerSiguienteToken();
 
 			ExpresionRelacional ExpRelIzq = (ExpresionRelacional) esExpresionRelacional();
 
 			if (ExpRelIzq != null) {
 
-				return new ExpresionLogica(opLogicoIzq, ExpRelIzq);
+				return new ExpresionLogica(negacion, ExpRelIzq);
 			} else {
 
 				reportarError("Falta una expresión logica");

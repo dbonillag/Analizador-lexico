@@ -34,7 +34,7 @@ public class Asignacion extends Sentencia {
 
 	@Override
 	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	/*
@@ -55,7 +55,7 @@ public class Asignacion extends Sentencia {
 			erroresSemanticos.add("La variable" + identificador.getPalabra() + " no existe");
 		} else {
 			if (expresion != null) {
-				if (!simbolo.getTipo().equals(expresion.obtenerTipo())) {
+				if (!simbolo.getTipo().equals(expresion.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito))) {
 					erroresSemanticos.add("El tipo de la expresión no es correcto");
 				}
 			}

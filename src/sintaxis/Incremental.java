@@ -31,7 +31,17 @@ public class Incremental extends Sentencia {
 
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		// TODO Auto-generated method stub
+		
+		Simbolo s = tablaSimbolos.buscarSimboloVariable(identificador.getPalabra(), ambito, identificador.getFila(),
+				identificador.getColumna());
+
+		if (s == null) {
+			erroresSemanticos.add("La variable " + identificador.getPalabra() + " no existe");
+		} else {
+			if (!(s.getTipo().equals("Z") || s.getTipo().equals("R"))) {
+				erroresSemanticos.add("La variable " + identificador.getPalabra() + " no es numérica");
+			}
+		}
 		
 	}
 
