@@ -64,4 +64,14 @@ public class ExpresionCadena extends Expresion {
 		return "text";
 	}
 
+	@Override
+	public String getJavaCode() {
+		String codigo = cadenaDeCaracteres.getPalabra();
+		if(expresion!=null) {
+			codigo+="+ ("+expresion+")";
+		}
+		
+		return codigo;
+	}
+
 }

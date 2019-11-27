@@ -60,6 +60,20 @@ public class Condicion extends Sentencia {
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
 		expLogica.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		for (Sentencia sentencia : bloqueSentencias) {
+			sentencia.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		}
+	}
+
+	@Override
+	public String getJavaCode() {
+		String codigo="";
+		codigo+="if("+expLogica.getJavaCode()+"){";
+		for (Sentencia sentencia : bloqueSentencias) {
+			codigo+=sentencia.getJavaCode();
+		}
 		
+		codigo+="} ";
+		return codigo;
 	}
 }

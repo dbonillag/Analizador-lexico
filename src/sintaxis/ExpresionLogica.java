@@ -78,7 +78,11 @@ public class ExpresionLogica extends Expresion {
 	@Override
 	public TreeItem<String> getArbolVisual() {
 		TreeItem<String> raiz = new TreeItem<>("Expresion Logica");
-
+		
+		if (negacion != null) {
+			raiz.getChildren().add(new TreeItem<>("Negación: " + negacion.getPalabra()));
+		}
+		
 		if (expresionRelacionalIzq != null)
 			raiz.getChildren().add(expresionRelacionalIzq.getArbolVisual());
 		if (operadorLogico != null) {
@@ -93,14 +97,16 @@ public class ExpresionLogica extends Expresion {
 
 
 	@Override
-	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		expresionRelacionalIzq.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
-		if(expresionRelacionalDer!=null)
-			
-			
-			
-			expresionRelacionalDer.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {	
 		
+		if(expresionRelacionalIzq!=null) {
+			expresionRelacionalIzq.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		}
+		
+		if(expresionRelacionalDer!=null) {
+			expresionRelacionalDer.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		}
+
 	}
 
 
@@ -109,6 +115,38 @@ public class ExpresionLogica extends Expresion {
 	public String obtenerTipo(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
 		
 		return "bin";
+	}
+
+
+
+	@Override
+	public String getJavaCode() {
+		
+		String codigo="";
+		
+		if (negacion!=null) {
+			codigo+="!(";
+		}else {
+			codigo+="(";
+		}
+		
+		
+		codigo = "(" + expresionRelacionalIzq.getJavaCode() + ")";
+		
+		if(operadorLogico!=null) {
+			if (operadorLogico.getPalabra().equals("^")) {
+				codigo+="&&";
+			}else if (operadorLogico.getPalabra().equals("¨")) {
+				codigo+="||";
+			}
+			
+			codigo+="("+expresionRelacionalDer.getJavaCode()+")";
+		}
+		
+		codigo+="";
+
+		System.out.println(codigo);
+		return codigo;
 	}
 
 }

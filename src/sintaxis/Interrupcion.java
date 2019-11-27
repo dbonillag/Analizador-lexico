@@ -30,4 +30,10 @@ public class Interrupcion extends Sentencia {
 		
 	}
 
+	@Override
+	public String getJavaCode() {
+		
+		return "break; ";
+	}
+
 }

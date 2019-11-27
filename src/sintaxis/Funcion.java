@@ -117,7 +117,72 @@ public class Funcion {
 		for (Sentencia sentencia : bloqueSentencias) {
 			sentencia.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
 		}
+		
+		if (!ambito.isRetorno()&&!ambito.getTipo().equals("void")) {
+			erroresSemanticos.add("El metodo "+nombre.getPalabra()+" no tiene ningún retorno");
+		}
 
+	}
+	
+	
+	public String getJavaCode() {
+		String codigo="public static ";
+		codigo+=getTipoDatoJava()+" ";
+		if (tipoRetorno.getPalabra().equals("void")&&nombre.getPalabra().equals("@main")&&parametros.isEmpty()) {
+			codigo+=nombre.getPalabra().replace("@", "")+"(";
+			
+			codigo+="String[] args";
+			
+		}else {
+			codigo+=nombre.getPalabra().replace("@", "$")+"(";
+			
+			for (Parametro parametro : parametros) {
+				codigo+=parametro.getTipoDatoJava()+" "+parametro.getNombre().getPalabra().replace("@", "$")+",";
+				
+			}
+			if (!parametros.isEmpty()) {
+				codigo=codigo.substring(0, codigo.length()-1);
+			}
+			
+		}
+		
+		codigo+=") {";
+		
+		for (Sentencia sentencia : bloqueSentencias) {
+			codigo+=sentencia.getJavaCode();
+		}
+		
+		codigo+="}";
+		
+		return codigo;
+	}
+	
+	
+	
+	public String getTipoDatoJava() {
+		
+		if (tipoRetorno.getPalabra().equals("Z")) {
+			return "int ";
+		}
+		else if (tipoRetorno.getPalabra().equals("R")) {
+			return "double ";
+		}
+		else if (tipoRetorno.getPalabra().equals("text")) {
+			return "String ";
+		}
+		else if (tipoRetorno.getPalabra().equals("bin")) {
+			return "boolean ";
+		}
+		else if (tipoRetorno.getPalabra().equals("char")) {
+			return "char ";
+		}else if (tipoRetorno.getPalabra().equals("void")) {
+			return "void ";
+		}
+		
+		return ""; 
+		
+		
+		
 	}
 
 }

@@ -64,14 +64,30 @@ public class InvocacionDeFuncion extends Sentencia {
 
 		Simbolo funcion = tablaSimbolos.buscarSimboloFuncion(identificador.getPalabra(), tipoArgumentos);
 		
-		if(funcion!=null) {
-			erroresSemanticos.add("La función "+identificador+""+tipoArgumentos+" no ha sido declarada");
+		if(funcion==null) {
+			erroresSemanticos.add("La función "+identificador.getPalabra()+""+tipoArgumentos+" no ha sido declarada");
 		}
 			
 		
 		
 		
 		
+	}
+
+	@Override
+	public String getJavaCode() {
+		String codigo=identificador.getPalabra().replace("@", "$")+"(";
+		for (Expresion expresion : argumentos) {
+			codigo+=expresion.getJavaCode()+",";
+		}
+		
+		if (!argumentos.isEmpty()) {
+			codigo=codigo.substring(0, codigo.length()-1);
+		}
+		
+		codigo+="); ";
+		
+		return codigo;
 	}
 
 }

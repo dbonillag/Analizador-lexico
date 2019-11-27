@@ -756,7 +756,7 @@ public class AnalizadorSintactico {
 
 	/**
 	 * <ExpresionRelacional>::=
-	 * <ExpresionAritmetica>operadorRelacional<ExpresionAritmetica>
+	 * <ExpresionAritmetica>[operadorRelacional<ExpresionAritmetica>]
 	 * 
 	 * @return
 	 */
@@ -773,9 +773,9 @@ public class AnalizadorSintactico {
 					reportarError("Falta la expresión relacional izquierda");
 				}
 			} else {
-				reportarError("Duda:Que pasa si enrealidad es una expresion aritmetica sola?");
+				
 			}
-
+			return new ExpresionRelacional(expresionAritIzq);
 		}
 		return null;
 	}

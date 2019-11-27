@@ -2,6 +2,8 @@ package sintaxis;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import javafx.scene.control.TreeItem;
 import semantica.Simbolo;
 import semantica.TablaSimbolos;
@@ -33,5 +35,11 @@ public class Impresion extends Sentencia {
 		
 		cadena.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
 		
+	}
+
+	@Override
+	public String getJavaCode() {
+		
+		return "JOptionPane.showMessageDialog(null,"+cadena.getJavaCode()+"); ";
 	}
 }

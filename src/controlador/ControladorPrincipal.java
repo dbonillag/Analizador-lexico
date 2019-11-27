@@ -1,5 +1,7 @@
 package controlador;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -48,6 +50,9 @@ public class ControladorPrincipal {
 
 	@FXML // fx:id="campoTexto"
 	private TextArea campoTexto; // Value injected by FXMLLoader
+	
+	 @FXML //fx:id="campoTexto"
+	 private Button btnEjecutar;
 
 	@FXML // fx:id="campoErrores"
 	private TextArea campoErrores; // Value injected by FXMLLoader
@@ -57,6 +62,12 @@ public class ControladorPrincipal {
 
 	@FXML
 	private TreeView<String> arbolVisual;
+
+	private AnalizadorSemantico analizadorSemantico;
+
+	private AnalizadorLexico analizadorLexico;
+
+	private AnalizadorSintactico analizadorSintactico;
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
@@ -73,23 +84,24 @@ public class ControladorPrincipal {
 				claseCelda -> new SimpleStringProperty(claseCelda.getValue().getCategoria().toString()));
 
 		campoTexto.setText("method @metodo bin (@a bin,@b text):\r\n" + 
-				"@a=5!\r\n" + 
-				"pacman @a!\r\n" + 
-				"@a=4p(5p3)!\r\n" + 
-				"read(@a)!\r\n" + 
+				"Z @c!\r\n" + 
+				"@c=5!\r\n" + 
+				"pacman @c!\r\n" + 
+				"@c=4p(5p3)!\r\n" + 
+				"read(@b)!\r\n" + 
 				"show(\"cadena\")!\r\n" + 
 				"cicle(5>4){\r\n" + 
-				"@a=6!\r\n" + 
+				"@c=6!\r\n" + 
 				"interrupt!\r\n" + 
 				"}\r\n" + 
-				"measure(@arreglo,@variable)!\r\n" + 
+				"list [text,5] @arreglo!\r\n" + 
+				"measure(@arreglo,@c)!\r\n" + 
 				"con(5==4){\r\n" + 
-				"@a=8!\r\n" + 
+				"@c=8!\r\n" + 
 				"}\r\n" + 
-				"call @metodoAInvocar(@a,5p4)!\r\n" + 
-				"text @miCadena!\r\n"+
-				"list [text,5] @miArreglo!\r\n"+
-				"regret @valor!\r\n" + 
+				"call @metodo(@a,\"saad\")!\r\n" + 
+				"text @miCadena!\r\n" + 
+				"regret @a!\r\n" + 
 				":\r\n" + 
 				"¿Is this the real life?\r\n" + 
 				"¿¿\r\n" + 
@@ -116,7 +128,7 @@ public class ControladorPrincipal {
 		campoErrores.setText("");
 
 		// Analisis Lexico
-		AnalizadorLexico analizadorLexico = new AnalizadorLexico(campoTexto.getText());
+		analizadorLexico = new AnalizadorLexico(campoTexto.getText());
 		analizadorLexico.analizar();
 		actualizarTabla(analizadorLexico.getListaTokens());
 		for (ErrorLexico error : analizadorLexico.getListaErrores()) {
@@ -124,18 +136,69 @@ public class ControladorPrincipal {
 		}
 
 		// Analisis Sintactico
-		AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getListaTokens());
+		analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getListaTokens());
 		UnidadDeCompilacion uc = analizadorSintactico.esUnidadDeCompilacion();
 		arbolVisual.setRoot(uc.getArbolVisual());
 		for (ErrorSintactico error : analizadorSintactico.getListaErrores()) {
 			campoErrores.appendText(error.toString() + "\n");
 		}
 		
-		AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico(uc);
+		analizadorSemantico = new AnalizadorSemantico(uc);
 		analizadorSemantico.llenarTablaSimbolos();
 		analizadorSemantico.analizarSemantica();
+		for(String error : analizadorSemantico.getErroresSemanticos()) {
+			campoErrores.appendText("Error semantico: "+error.toString()+"\n");
+		}
+		
+		btnEjecutar.setDisable(false);
+		btnEjecutar.setVisible(true);
+	}
+	
+	@FXML
+	void ejecutar(ActionEvent event) {
+		
+		if(analizadorSemantico.getErroresSemanticos().isEmpty()&&
+				analizadorSintactico.getListaErrores().isEmpty()&&
+				analizadorLexico.getListaErrores().isEmpty()) {
+			String codigo=analizadorSemantico.getUc().getJavaCode();
+			escribirArchivo(codigo);
+			
+			try {
+				Process r = Runtime.getRuntime().exec("javac src/Principal.java");
+				r.waitFor();
+				
+				Runtime.getRuntime().exec("java bin/Principal.class");
+				System.out.println("Exito!");
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 
+	}
+	
+	public void escribirArchivo(String codigo) {
+		
+		
+		String ruta = "src/Principal.java";
+		
+		try {
+			FileWriter fis = new FileWriter(ruta);
+			BufferedWriter bw = new BufferedWriter(fis);
+			
+			bw.write(codigo);
+			bw.close();
+		}catch(Exception e){
+			
+			e.printStackTrace();
+			
+			
+		}
+	}
+	
+	
+	public void traducirCodigo() {
+		
 	}
 
 }

@@ -32,18 +32,29 @@ public class UnidadDeCompilacion {
 	}
 
 	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos) {
-		for(Funcion funcion : listaFunciones) {
+		for (Funcion funcion : listaFunciones) {
 			funcion.llenarTablaSimbolos(tablaSimbolos, erroresSemanticos);
 		}
 	}
 
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos) {
-		
-		for(Funcion f : listaFunciones) {
+
+		for (Funcion f : listaFunciones) {
 			f.analizarSemantica(tablaSimbolos, erroresSemanticos);
 		}
-		
+
 	}
-	
+
+	public String getJavaCode() {
+		String codigo = "import javax.swing.JOptionPane; public class Principal{ ";
+
+		for (Funcion f : listaFunciones) {
+			codigo += f.getJavaCode();
+		}
+
+		codigo += "}";
+
+		return codigo;
+	}
 
 }

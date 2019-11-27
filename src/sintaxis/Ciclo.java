@@ -57,7 +57,22 @@ public class Ciclo extends Sentencia {
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
 		expLog.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		for (Sentencia s : bloqueSentencias) {
+			s.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		}
 		
+	}
+
+	@Override
+	public String getJavaCode() {
+		String codigo="";
+		codigo+="while("+expLog.getJavaCode()+"){";
+		for (Sentencia sentencia : bloqueSentencias) {
+			codigo+=sentencia.getJavaCode();
+		}
+		
+		codigo+="} ";
+		return codigo;
 	}
 
 

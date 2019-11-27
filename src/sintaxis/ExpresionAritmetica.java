@@ -96,12 +96,12 @@ public class ExpresionAritmetica extends Expresion {
 				if (s == null) {
 					
 				} else {
-					if (s.getTipo().equals("Z") ) {
-						tipo= "Z";
-					}else if(s.getTipo().equals("R") ) {
-						tipo="R";
-					}
+					tipo=s.getTipo();
 				}
+			}else if(termino.getCategoria()==Categoria.ENTERO) {
+				tipo="Z";
+			}else if(termino.getCategoria()==Categoria.REAL) {
+				tipo="R";
 			}
 		}
 
@@ -138,7 +138,7 @@ public class ExpresionAritmetica extends Expresion {
 				if (s == null) {
 					erroresSemanticos.add("La variable " + termino.getPalabra() + " no existe");
 				} else {
-					if (!(s.getTipo().equals("Z") || s.getTipo().equals("R"))) {
+					if (!(s.getTipo().equals("Z") || s.getTipo().equals("R"))&&expresionAritmetica1!=null&&expresionAritmetica2!=null) {
 						erroresSemanticos.add("La variable " + termino.getPalabra() + " no es numérica");
 					}
 				}
@@ -153,6 +153,58 @@ public class ExpresionAritmetica extends Expresion {
 			expresionAritmetica2.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
 		}
 
+	}
+
+	@Override
+	public String getJavaCode() {
+		String codigo="(";
+		if (termino!=null) {
+			if (termino.getCategoria()==Categoria.IDENTIFICADOR) {
+				codigo+=termino.getPalabra().replace("@", "$")+")";
+			}else {
+				codigo+=termino.getPalabra().replace("@", "$")+")";
+			}
+			
+			
+			if (operadorAritmetico!=null) {
+				if (operadorAritmetico.getPalabra().equals("p")) {
+					codigo+="+";
+				}else if (operadorAritmetico.getPalabra().equals("s")) {
+					codigo+="-";
+				}else if (operadorAritmetico.getPalabra().equals("m")) {
+					codigo+="*";
+				}else if (operadorAritmetico.getPalabra().equals("d")) {
+					codigo+="/";
+				}
+				
+				codigo+="("+expresionAritmetica1.getJavaCode()+")";
+			}
+			
+			
+			
+		}else {
+			
+			
+			codigo+=expresionAritmetica1.getJavaCode()+")";
+			
+			if (operadorAritmetico!=null) {
+				if (operadorAritmetico.getPalabra().equals("p")) {
+					codigo+="+";
+				}else if (operadorAritmetico.getPalabra().equals("s")) {
+					codigo+="-";
+				}else if (operadorAritmetico.getPalabra().equals("m")) {
+					codigo+="*";
+				}else if (operadorAritmetico.getPalabra().equals("d")) {
+					codigo+="/";
+				}
+				
+				codigo+="("+expresionAritmetica2.getJavaCode()+")";
+			}
+			
+		}
+		
+		
+		return codigo;
 	}
 
 }

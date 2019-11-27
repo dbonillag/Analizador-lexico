@@ -35,7 +35,42 @@ public class Medida extends Sentencia {
 
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		// TODO Auto-generated method stub
 		
+		
+		Simbolo s = tablaSimbolos.buscarSimboloVariable(identificadorArreglo.getPalabra(), ambito, identificadorArreglo.getFila(),
+				identificadorArreglo.getColumna());
+
+		if (s == null) {
+			erroresSemanticos.add("La variable " + identificadorArreglo.getPalabra() + " no existe, fila: "+identificadorArreglo.getFila());
+		} else {
+			if (!(s.getTipo().endsWith("[]"))) {
+				erroresSemanticos.add("La variable " + identificadorArreglo.getPalabra() + " no es un arreglo,, fila: "+identificadorArreglo.getFila());
+			}
+		}
+		
+		s = tablaSimbolos.buscarSimboloVariable(identificadorVariable.getPalabra(), ambito, identificadorVariable.getFila(),
+				identificadorVariable.getColumna());
+
+		if (s == null) {
+			erroresSemanticos.add("La variable " + identificadorVariable.getPalabra() + " no existe, fila: "+identificadorVariable.getFila());
+		} else {
+			if (!(s.getTipo().equals("Z"))) {
+				erroresSemanticos.add("La variable " + identificadorVariable.getPalabra() + " no es entero, fila: "+identificadorVariable.getFila());
+			}
+		}
+		
+		
+		
+		
+	}
+
+	@Override
+	public String getJavaCode() {
+		int[]arreglo= {3,4,5,6};
+		
+		
+		String codigo=identificadorVariable.getPalabra().replace("@", "$")+"="+
+	identificadorArreglo.getPalabra().replace("@", "$")+".length; ";
+		return codigo;
 	}
 }

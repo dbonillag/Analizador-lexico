@@ -67,4 +67,15 @@ public class Asignacion extends Sentencia {
 
 	}
 
+	@Override
+	public String getJavaCode() {
+		String codigo="";
+		
+		codigo+=identificador.getPalabra().replace("@", "$")+operadorAsignacion.getPalabra()+expresion.getJavaCode()+"; ";
+		
+		
+		return codigo;
+		
+	}
+
 }

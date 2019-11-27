@@ -10,17 +10,23 @@ import semantica.TablaSimbolos;
 public class ExpresionRelacional extends Expresion {
 
 	ExpresionAritmetica expresionIzquierda;
-	Token operadorAritmetico;
+	Token operadorRelacional;
 	ExpresionAritmetica expresionDerecha;
 
 	public ExpresionRelacional(ExpresionAritmetica expresionIzquierda, Token operadorAritmetico,
 			ExpresionAritmetica expresionDerecha) {
 		super();
 		this.expresionIzquierda = expresionIzquierda;
-		this.operadorAritmetico = operadorAritmetico;
+		this.operadorRelacional = operadorAritmetico;
 		this.expresionDerecha = expresionDerecha;
 	}
 
+	public ExpresionRelacional(ExpresionAritmetica expresionIzquierda) {
+		super();
+		this.expresionIzquierda = expresionIzquierda;
+		
+	}
+	
 	public ExpresionAritmetica getExpresionIzquierda() {
 		return expresionIzquierda;
 	}
@@ -29,12 +35,14 @@ public class ExpresionRelacional extends Expresion {
 		this.expresionIzquierda = expresionIzquierda;
 	}
 
-	public Token getOperadorAritmetico() {
-		return operadorAritmetico;
+	
+
+	public Token getOperadorRelacional() {
+		return operadorRelacional;
 	}
 
-	public void setOperadorAritmetico(Token operadorAritmetico) {
-		this.operadorAritmetico = operadorAritmetico;
+	public void setOperadorRelacional(Token operadorRelacional) {
+		this.operadorRelacional = operadorRelacional;
 	}
 
 	public ExpresionAritmetica getExpresionDerecha() {
@@ -51,8 +59,8 @@ public class ExpresionRelacional extends Expresion {
 
 		if (expresionIzquierda != null)
 			raiz.getChildren().add(expresionIzquierda.getArbolVisual());
-		if (operadorAritmetico != null) {
-			raiz.getChildren().add(new TreeItem<>("Operador: " + operadorAritmetico.getPalabra()));
+		if (operadorRelacional != null) {
+			raiz.getChildren().add(new TreeItem<>("Operador: " + operadorRelacional.getPalabra()));
 		}
 		if (expresionDerecha != null) {
 			raiz.getChildren().add(expresionDerecha.getArbolVisual());
@@ -61,18 +69,62 @@ public class ExpresionRelacional extends Expresion {
 		return raiz;
 	}
 
-
-
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		
-		
+		String tipo = "";
+		if (expresionDerecha != null) {
+			expresionDerecha.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+			tipo = expresionDerecha.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito);
+			if (!(tipo.equals("R") || tipo.equals("Z"))) {
+				
+				erroresSemanticos.add("El tipo de la expresión aritmetica es invalido");
+			}
+		}
+
+		if (expresionIzquierda != null) {
+			expresionIzquierda.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+			tipo = expresionIzquierda.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito);
+			if (!(tipo.equals("R") || tipo.equals("Z"))) {
+				
+				
+				if(!(tipo.equals("bin")&&operadorRelacional==null)) {
+					erroresSemanticos.add("El tipo de la expresión aritmetica es invalido");
+				}
+			}
+		}
 	}
 
 	@Override
 	public String obtenerTipo(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		
+
 		return "bin";
+	}
+
+	@Override
+	public String getJavaCode() {
+
+		String codigo = "(" + expresionIzquierda.getJavaCode() + ") ";
+		if(operadorRelacional!=null) {
+			if (operadorRelacional.getPalabra().equals(">=")) {
+				codigo+=">=";
+			}else if (operadorRelacional.getPalabra().equals("<=")) {
+				codigo+="<=";
+			}else if (operadorRelacional.getPalabra().equals(">")) {
+				codigo+=">";
+			}else if (operadorRelacional.getPalabra().equals("<")) {
+				codigo+="<";
+			}else if (operadorRelacional.getPalabra().equals("==")) {
+				codigo+="==";
+			}else if (operadorRelacional.getPalabra().equals("~=")) {
+				codigo+="!=";
+			}
+			
+			codigo+="("+expresionDerecha.getJavaCode()+") ";
+		}
+		
+
+		
+		return codigo;
 	}
 
 }

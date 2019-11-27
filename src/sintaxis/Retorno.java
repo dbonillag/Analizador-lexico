@@ -32,8 +32,22 @@ public class Retorno extends Sentencia {
 
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
-		// TODO Auto-generated method stub
+		expresion.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito);
+		if(!ambito.getTipo().equals("void")) {
+			if (!(expresion.obtenerTipo(tablaSimbolos, erroresSemanticos, ambito).equals(ambito.getTipo()))) {
+				erroresSemanticos.add("El tipo de retorno no corresponde al valor retornado");
+			}else {
+				ambito.setRetorno(true);
+			}
+		}
 		
+		
+	}
+
+	@Override
+	public String getJavaCode() {
+		
+		return "return "+expresion.getJavaCode()+"; ";
 	}
 
 }

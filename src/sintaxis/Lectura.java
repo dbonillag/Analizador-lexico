@@ -2,6 +2,8 @@ package sintaxis;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import javafx.scene.control.TreeItem;
 import lexico.Token;
 import semantica.Simbolo;
@@ -33,7 +35,7 @@ public class Lectura extends Sentencia {
 			erroresSemanticos.add("La variable " + identificador.getPalabra() + " no existe");
 		} else {
 			if (!(s.getTipo().equals("text"))) {
-				erroresSemanticos.add("La variable " + identificador.getPalabra() + " no es texto ni numerico");
+				erroresSemanticos.add("La variable " + identificador.getPalabra() + " no es texto");
 			}
 		}
 		
@@ -44,4 +46,13 @@ public class Lectura extends Sentencia {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String getJavaCode() {
+		return identificador.getPalabra().replace("@", "$")+"=JOptionPane.showInputDialog(\"\"); ";
+	}
+	
+	
+	
+	
 }

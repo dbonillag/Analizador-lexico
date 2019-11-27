@@ -31,13 +31,32 @@ public class DeclaracionDeVariable extends Sentencia {
 	public void llenarTablaSimbolos(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
 		tablaSimbolos.guardarSimboloVariable(identificador.getPalabra(), tipoDato.getPalabra(), tipoDato.getFila(), tipoDato.getColumna(), ambito);
 
-
-		
-		
 	}
 
 	@Override
 	public void analizarSemantica(TablaSimbolos tablaSimbolos, ArrayList<String> erroresSemanticos, Simbolo ambito) {
+		
+		
+	}
+	
+	public String getJavaCode() {
+		
+		String jDeclaracion="";
+		if (tipoDato.getPalabra().equals("Z")) {
+			jDeclaracion+="int ";
+		}else if (tipoDato.getPalabra().equals("R")) {
+			jDeclaracion+="double ";
+		}else if (tipoDato.getPalabra().equals("text")) {
+			jDeclaracion+="String ";
+		}else if (tipoDato.getPalabra().equals("bin")) {
+			jDeclaracion+="boolean ";
+		}
+		 
+		jDeclaracion+=identificador.getPalabra().replace("@", "$")+"; ";
+		
+		return jDeclaracion;
+		
+			
 		
 		
 	}

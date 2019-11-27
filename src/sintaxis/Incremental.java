@@ -45,4 +45,10 @@ public class Incremental extends Sentencia {
 		
 	}
 
+	@Override
+	public String getJavaCode() {
+		
+		return identificador.getPalabra().replace("@", "$")+"++; ";
+	}
+
 }

@@ -11,6 +11,7 @@ public class Simbolo {
 	private int fila, columna;
 	private Simbolo ambito;
 	private ArrayList<String> tipoParametros;
+	private boolean retorno;
 
 	// Para instanciar variable
 	public Simbolo(String nombre, String tipo, int fila, int columna, Simbolo ambito) {
@@ -77,5 +78,15 @@ public class Simbolo {
 	public void setTipoParametros(ArrayList<String> tipoParametros) {
 		this.tipoParametros = tipoParametros;
 	}
+
+	public boolean isRetorno() {
+		return retorno;
+	}
+
+	public void setRetorno(boolean retorno) {
+		this.retorno = retorno;
+	}
+	
+	
 
 }

@@ -39,4 +39,31 @@ public class Parametro {
 		return raiz;
 
 	}
+	
+	
+public String getTipoDatoJava() {
+		
+		if (tipoDato.getPalabra().equals("Z")) {
+			return "int ";
+		}
+		else if (tipoDato.getPalabra().equals("R")) {
+			return "double ";
+		}
+		else if (tipoDato.getPalabra().equals("text")) {
+			return "String ";
+		}
+		else if (tipoDato.getPalabra().equals("bin")) {
+			return "boolean ";
+		}
+		else if (tipoDato.getPalabra().equals("char")) {
+			return "char ";
+		}else if (tipoDato.getPalabra().equals("void")) {
+			return "void ";
+		}
+		
+		return ""; 
+		
+		
+		
+	}
 }
