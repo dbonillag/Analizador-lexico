@@ -83,7 +83,13 @@ public class ControladorPrincipal {
 		columnaCategoria.setCellValueFactory(
 				claseCelda -> new SimpleStringProperty(claseCelda.getValue().getCategoria().toString()));
 
-		campoTexto.setText("method @metodo bin (@a bin,@b text):\r\n" + 
+		campoTexto.setText("method @main void ():\r\n" + 
+				"bin @a!\r\n" + 
+				"@a = true;\r\n" + 
+				"text @b!\r\n" + 
+				"call @metodo(@a,@b)!\r\n" + 
+				":"+
+				"method @metodo bin (@a bin,@b text):\r\n" + 
 				"Z @c!\r\n" + 
 				"@c=5!\r\n" + 
 				"pacman @c!\r\n" + 

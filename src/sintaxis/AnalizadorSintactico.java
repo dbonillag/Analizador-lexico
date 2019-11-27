@@ -800,7 +800,6 @@ public class AnalizadorSintactico {
 			} else {
 
 				reportarError("Falta una expresión logica");
-
 			}
 
 		}
@@ -919,7 +918,6 @@ public class AnalizadorSintactico {
 				} else {
 					reportarError("Falta expresión en la asignación");
 				}
-
 			} else {
 				reportarError("Falta operador de asignación");
 			}
